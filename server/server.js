@@ -3,9 +3,9 @@ let app = express();
 const http = require('http');
 const https = require('https');
 let fs = require('fs');
-const config = require('./config.json');
+const config = require(`${__dirname}/config.json`);
 
-app.use(express.static(config.serveDirectory));
+app.use(express.static(`${__dirname}/${config.serveDirectory}`));
 
 let certs = {
 	key: fs.readFileSync(config.certs.key),
@@ -34,4 +34,10 @@ httpsWebserver.listen(config.sslPort, () => {
 
 redirectServer.listen(config.redirectPort, () => {
 	console.log(`Listening on localhost:${config.redirectPort}`);
+});
+
+process.on('SIGINT', function() {
+    httpsWebserver.close();
+    redirectServer.close();
+    process.exit();
 });
