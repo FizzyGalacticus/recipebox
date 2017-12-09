@@ -12,32 +12,13 @@ let certs = {
 	cert: fs.readFileSync(config.certs.cert),
 };
 
-let httpsWebserver = https.createServer(certs, app);
+let server = https.createServer(certs, app);
 
-let redirectServer = http.createServer((req, res) => {
-	res.writeHead(302, {Location: `https://${req.headers.host}:${config.sslPort + req.url}`});
-	res.end();
-
-	try {
-		let requesterIp = req.connection.remoteAddress.split(':');
-		requesterIp = requesterIp[requesterIp.length - 1];
-		console.log(`Request for insecure page from: ${requesterIp}`);
-	}
-	catch(err) {
-		console.log(`Error when attempting to read IP: ${err}`);
-	}
-});
-
-httpsWebserver.listen(config.sslPort, () => {
+server.listen(config.sslPort, () => {
 	console.log(`Securely listening on localhost:${config.sslPort}`);
 });
 
-redirectServer.listen(config.redirectPort, () => {
-	console.log(`Listening on localhost:${config.redirectPort}`);
-});
-
 process.on('SIGINT', function() {
-    httpsWebserver.close();
-    redirectServer.close();
+    server.close();
     process.exit();
 });

@@ -4,6 +4,5 @@
 		"key":"server/keys/key.key"
 	},
 	"serveDirectory":"../dist",
-	"sslPort": 443,
-	"redirectPort": 80
+	"sslPort": 443
 }
