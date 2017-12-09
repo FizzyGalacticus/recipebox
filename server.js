@@ -35,30 +35,3 @@ httpsWebserver.listen(config.sslPort, () => {
 redirectServer.listen(config.redirectPort, () => {
 	console.log(`Listening on localhost:${config.redirectPort}`);
 });
-
-// module.exports = {
-// 	listen: (callback) => {
-// 		return new Promise(async (resolve, reject) => {
-// 			httpsWebserver.listen(config.sslPort, () => {
-// 				console.log(`Securely listening on localhost:${config.sslPort}`);
-// 			});
-
-// 			redirectServer.listen(config.redirectPort, () => {
-// 				console.log(`Listening on localhost:${config.redirectPort}`);
-// 			});
-
-// 			try {
-// 				if(callback)
-// 					callback();
-// 				resolve();
-// 			}
-// 			catch(err) {
-// 				reject(err);
-// 			}
-// 		});
-// 	},
-// 	close: () => {
-// 		httpsWebserver.close();
-// 		redirectServer.close();
-// 	},
-// };
