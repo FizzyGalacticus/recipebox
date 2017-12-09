@@ -1,0 +1,9 @@
+{
+	"certs": {
+		"cert":"./keys/cert.cert",
+		"key":"./keys/key.key"
+	},
+	"serveDirectory":"./dist",
+	"sslPort": 443,
+	"redirectPort": 80
+}
