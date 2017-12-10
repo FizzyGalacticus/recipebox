@@ -1,7 +1,7 @@
 {
 	"certs": {
-		"cert":"server/keys/cert.cert",
-		"key":"server/keys/key.key"
+		"cert":"/certs/cert.cert",
+		"key":"/certs/key.key"
 	},
 	"serveDirectory":"../dist",
 	"sslPort": 5000

@@ -8,6 +8,7 @@ RUN ln -sf /bin/true /sbin/initctl
 RUN apt-get update
 RUN apt-get install -y mongodb-org
 VOLUME ["/data/db"]
+VOLUME ["/certs"]
 
 RUN groupadd -r nodejs && useradd -m -r -g nodejs nodejs
 RUN mkdir -p /home/nodejs/app
@@ -23,10 +24,10 @@ RUN npm install
 COPY . /home/nodejs/app
 
 RUN chown -R nodejs:nodejs /home/nodejs/app
-USER nodejs
+#USER nodejs
 #RUN npm start &
 
-USER root
+#USER root
 COPY bash_scripts/start.sh /start.sh
 RUN chmod +x /start.sh
 ENTRYPOINT /start.sh

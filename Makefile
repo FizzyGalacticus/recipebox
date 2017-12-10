@@ -12,9 +12,12 @@ endif
 include $(deployfile)
 export $(shell sed 's/=.*//' $(deployfile))
 
+DATA_DIR=/data/db/recipebox
+CERT_DIR=/certs
+
 TAG=$(shell git log --pretty=format:'%h' -n 1)
 NAMESPACE=recipes
-ARGS=-t --env-file ./config.env -p 5000:5000 -p 27017:27017 -v /data/db/recipebox:/data/db --name $(APP_NAME) $(NAMESPACE)/$(APP_NAME):$(TAG)
+ARGS=-t --env-file ./config.env -p 5000:5000 -p 27017:27017 -v $(DATA_DIR):/data/db -v $(CERT_DIR):/certs --name $(APP_NAME) $(NAMESPACE)/$(APP_NAME):$(TAG)
 
 build:
 	docker build --rm -t $(NAMESPACE)/$(APP_NAME):$(TAG) .
