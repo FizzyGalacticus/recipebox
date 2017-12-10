@@ -50,4 +50,4 @@ npm:
 	@echo "  stop       : stop image"
 	@echo "  restart    : restart image (same as stop, then run)"
 	@echo "  it         : run image with an interactive prompt"
-	@echo "  npm        : run npm server on port 80"
+	@echo "  npm        : run npm server on port 443"
