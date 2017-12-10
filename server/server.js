@@ -12,10 +12,15 @@ let certs = {
 	cert: fs.readFileSync(config.certs.cert),
 };
 
-let server = https.createServer(certs, app);
+// let server = https.createServer(certs, app);
+let server = http.createServer(app);
+
+// server.listen(config.sslPort, () => {
+// 	console.log(`Securely listening on localhost:${config.sslPort}`);
+// });
 
 server.listen(config.sslPort, () => {
-	console.log(`Securely listening on localhost:${config.sslPort}`);
+	console.log(`Listening on localhost:${config.sslPort}`);
 });
 
 process.on('SIGINT', function() {

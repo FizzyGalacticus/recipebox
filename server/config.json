@@ -4,5 +4,5 @@
 		"key":"server/keys/key.key"
 	},
 	"serveDirectory":"../dist",
-	"sslPort": 443
+	"sslPort": 5000
 }
