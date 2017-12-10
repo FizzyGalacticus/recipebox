@@ -7,8 +7,8 @@ const config = require(`${__dirname}/config.json`);
 app.use(express.static(`${__dirname}/${config.serveDirectory}`));
 
 let certs = {
-	key: fs.readFileSync(config.certs.key),
-	cert: fs.readFileSync(config.certs.cert),
+	key: fs.readFileSync(process.env.KEY ? process.env.KEY : config.certs.key),
+	cert: fs.readFileSync(process.env.CERT ? process.env.CERT : config.certs.cert),
 };
 
 let server = https.createServer(certs, app);

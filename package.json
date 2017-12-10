@@ -5,7 +5,8 @@
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js || true"
+    "start": "sudo node server/server.js || true",
+    "serve-prod": "PORT=5000 KEY=/certs/key.key CERT=/certs/cert.cert node server/server.js"
   },
   "repository": {
     "type": "git",

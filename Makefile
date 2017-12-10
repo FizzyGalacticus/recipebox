@@ -39,7 +39,7 @@ it:
 	docker run -it $(ARGS) bash
 
 npm:
-	sudo PORT=443 node server/server.js 
+	npm run serve-prod 
 
 %::
 	@echo "Valid choices:"
