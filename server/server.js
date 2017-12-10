@@ -15,8 +15,9 @@ let certs = {
 let server = https.createServer(certs, app);
 // let server = http.createServer(app);
 
-server.listen(config.sslPort, () => {
-	console.log(`Securely listening on localhost:${config.sslPort}`);
+const PORT = process.env.PORT ? process.env.PORT : config.sslPort;
+server.listen(PORT, () => {
+	console.log(`Securely listening on localhost:${PORT}`);
 });
 
 // server.listen(config.sslPort, () => {

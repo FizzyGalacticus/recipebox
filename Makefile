@@ -38,6 +38,9 @@ restart: stop run
 it:
 	docker run -it $(ARGS) bash
 
+npm:
+	sudo PORT=443 node server/server.js 
+
 %::
 	@echo "Valid choices:"
 	@echo "  build      : build image"
@@ -47,3 +50,4 @@ it:
 	@echo "  stop       : stop image"
 	@echo "  restart    : restart image (same as stop, then run)"
 	@echo "  it         : run image with an interactive prompt"
+	@echo "  npm        : run npm server on port 80"
