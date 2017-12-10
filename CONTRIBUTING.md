@@ -43,7 +43,7 @@ That's it! You're ready to start working on RecipeBox!
 To run the instance of the server on your local machine, execute the following command:
 
 ```bash
-sudo node server.js
+npm start
 ```
 
 Take note that this command is run as root -- that is because to bind to port 443 (the default SSL port) you must have root privileges.
