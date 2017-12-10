@@ -1,6 +1,5 @@
 let express = require('express');
 let app = express();
-const http = require('http');
 const https = require('https');
 let fs = require('fs');
 const config = require(`${__dirname}/config.json`);
@@ -13,17 +12,12 @@ let certs = {
 };
 
 let server = https.createServer(certs, app);
-// let server = http.createServer(app);
 
 server.listen(config.sslPort, () => {
 	console.log(`Securely listening on localhost:${config.sslPort}`);
 });
 
-// server.listen(config.sslPort, () => {
-// 	console.log(`Listening on localhost:${config.sslPort}`);
-// });
-
 process.on('SIGINT', function() {
-    server.close();
-    process.exit();
+	server.close();
+	process.exit();
 });
