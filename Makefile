@@ -34,3 +34,13 @@ restart: stop run
 
 it:
 	docker run -it $(ARGS) bash
+
+%::
+	@echo "Valid choices:"
+	@echo "  build      : build image"
+	@echo "  build-nc   : build image without using cache"
+	@echo "  run        : start image"
+	@echo "  up         : build (no cache) and run image"
+	@echo "  stop       : stop image"
+	@echo "  restart    : restart image (same as stop, then run)"
+	@echo "  it         : run image with an interactive prompt"
