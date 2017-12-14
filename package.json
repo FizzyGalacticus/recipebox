@@ -50,6 +50,8 @@
     "@fortawesome/fontawesome": "^1.0.1",
     "@fortawesome/react-fontawesome": "0.0.16",
     "express": "^4.16.2",
+    "gridfs-stream": "^1.1.1",
+    "mongoose": "^4.13.7",
     "react-dev": "0.0.1"
   }
 }
