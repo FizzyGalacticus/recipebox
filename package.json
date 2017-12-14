@@ -52,6 +52,7 @@
     "express": "^4.16.2",
     "gridfs-stream": "^1.1.1",
     "mongoose": "^4.13.7",
-    "react-dev": "0.0.1"
+    "react-dev": "0.0.1",
+    "socket.io": "^2.0.4"
   }
 }

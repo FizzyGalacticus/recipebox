@@ -2,6 +2,7 @@ let express = require('express');
 let app = express();
 const https = require('https');
 let fs = require('fs');
+let SocketHandler = require('./sockets/SocketHandler.js');
 const config = require(`${__dirname}/config.json`);
 
 app.use(express.static(`${__dirname}/${config.serveDirectory}`));
@@ -12,6 +13,7 @@ let certs = {
 };
 
 let server = https.createServer(certs, app);
+let socketHandler = new SocketHandler(server);
 
 const PORT = process.env.PORT ? process.env.PORT : config.sslPort;
 server.listen(PORT, () => {
