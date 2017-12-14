@@ -54,8 +54,11 @@ gulp.task('compile-scripts', () => {
 		presets: ['react', 'env'],
 	})
 	.bundle()
+	.on('error', function(err) {
+		console.error(err);
+		this.emit('end');
+	})
 	.pipe(source('app.js'))
-	.pipe(plumber())
     .pipe(gulp.dest('dist/js'));
 });
 
@@ -124,8 +127,20 @@ gulp.task('all', (callback) => {
 	sequence('prod', 'compile-scripts', 'min-scripts', ['min-html', 'sass', 'fonts'])(callback);
 });
 
-gulp.task('watch', () => {
-	gulp.watch('www/**', ['all']);
+gulp.task('watch-scripts', () => {
+	gulp.watch('www/js/**/*.js', ['compile-scripts', 'min-scripts']);
 });
 
-gulp.task('default', sequence('all', 'watch'));
+gulp.task('watch-html', () => {
+	gulp.watch('www/**/*.html', ['min-html']);
+});
+
+gulp.task('watch-sass', () => {
+	gulp.watch(['www/scss/**/*.scss', 'www/scss/**/*.css', 'www/css/**/*.css'], ['sass']);
+});
+
+gulp.task('watch-fonts', () => {
+	gulp.watch(['www/fonts/**'], ['fonts']);
+});
+
+gulp.task('default', sequence('all', ['watch-scripts', 'watch-html', 'watch-sass', 'watch-fonts']));
