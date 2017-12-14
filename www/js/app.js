@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+
 import MenuBar from './components/MenuBar';
+import SampleComponent from './components/SampleComponent';
+import NoMatch from './components/NoMatch';
 
 let socket = io(`https://localhost`);
 
@@ -30,17 +34,39 @@ socket.emit('getIngredient');
 socket.emit('getMeasurement');
 socket.emit('getUser');
 
-class Layout extends React.Component {
+class Layout extends Component {
 	render() {
+		const MenuBarWrapper = props => {
+			return (
+				<MenuBar title="Blank React App" />
+			);
+		}
+
+		const SampleComponentWrapper = props => {
+			return (
+				<SampleComponent
+					msg="hello world from reactJS"
+					{...props}
+				/>
+			);
+		}
+
 		return (
-			<div>
-				<MenuBar title="Blank React App"></MenuBar>
-				<div>{this.props.message}</div>
-			</div>
+			<Router>
+				<div className='containter content-container' >
+					<MenuBarWrapper title="Black React App" />
+
+					<Switch>
+						<Route path="/home" component={SampleComponentWrapper} />
+						<Redirect exact from="/" to="/home" />
+						<Route component={NoMatch} />
+					</Switch>
+				</div>
+			</Router>
 		);
 	}
 }
 
 const app = document.getElementById('app');
 
-ReactDOM.render(<Layout message="Hello world from ReactJS!" />, app);
+ReactDOM.render(<Layout />, app);
