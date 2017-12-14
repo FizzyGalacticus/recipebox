@@ -143,4 +143,8 @@ gulp.task('watch-fonts', () => {
 	gulp.watch(['www/fonts/**'], ['fonts']);
 });
 
-gulp.task('default', sequence('all', ['watch-scripts', 'watch-html', 'watch-sass', 'watch-fonts']));
+gulp.task('watch-img', () => {
+	gulp.watch(['www/img/**'], ['min-image']);
+});
+
+gulp.task('default', sequence('all', ['watch-scripts', 'watch-html', 'watch-sass', 'watch-fonts', 'watch-img']));
