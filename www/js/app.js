@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 
-import MenuBar from './components/MenuBar';
 import SampleComponent from './components/SampleComponent';
 import NoMatch from './components/NoMatch';
+import NavBarContainer from './containers/NavBarContainer';
 
 let socket = io(`https://localhost`);
 
@@ -34,35 +34,76 @@ socket.emit('getIngredient');
 socket.emit('getMeasurement');
 socket.emit('getUser');
 
-class Layout extends Component {
-	render() {
-		const MenuBarWrapper = props => {
-			return (
-				<MenuBar title="Blank React App" />
-			);
-		}
-
-		const SampleComponentWrapper = props => {
+const SampleComponentWrapper = props => {
 			return (
 				<SampleComponent
-					msg="hello world from reactJS"
+					msg="hello world"
 					{...props}
 				/>
 			);
 		}
 
-		return (
-			<Router>
-				<div className='containter content-container' >
-					<MenuBarWrapper title="Black React App" />
+// add new links to this object
+const LINKS = [
+	{
+		'title':'Home',
+		'href':'/home',
+		'component': (props) => {
+			return (
+				<SampleComponent
+					msg="hello world, this is a placeholder for a home page"
+					{...props}
+				/>
+			);
+		}
+	},
+	{
+		'title':'About',
+		'href':'/about',
+		'component': (props) => {
+			return (
+				<SampleComponent
+					msg="yolo"
+					{...props}
+				/>
+			);
+		}
+	},
+	{
+		'title':'Contact',
+		'href':'/contact',
+		'component': (props) => {
+			return (
+				<SampleComponent
+					msg="contact page"
+					{...props}
+				/>
+			);
+		}
+	}
+];
 
+class Layout extends Component {
+	render() {
+
+		return (
+			<HashRouter>
+				<div className='containter content-container' >
+					<NavBarContainer links={LINKS} />
 					<Switch>
-						<Route path="/home" component={SampleComponentWrapper} />
+						{LINKS.map( (link,i) => {
+							return (
+								<Route 
+									path={link.href} 
+									component={link.component} />
+							);
+						})}
+						
 						<Redirect exact from="/" to="/home" />
 						<Route component={NoMatch} />
 					</Switch>
 				</div>
-			</Router>
+			</HashRouter>
 		);
 	}
 }
