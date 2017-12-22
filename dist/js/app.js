@@ -45096,10 +45096,6 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _reactRouterDom = require('react-router-dom');
 
-var _MenuBar = require('./components/MenuBar');
-
-var _MenuBar2 = _interopRequireDefault(_MenuBar);
-
 var _SampleComponent = require('./components/SampleComponent');
 
 var _SampleComponent2 = _interopRequireDefault(_SampleComponent);
@@ -45224,57 +45220,7 @@ var app = document.getElementById('app');
 
 _reactDom2.default.render(_react2.default.createElement(Layout, null), app);
 
-},{"./components/MenuBar":328,"./components/NoMatch":330,"./components/SampleComponent":331,"./containers/NavBarContainer":332,"react":320,"react-dom":267,"react-router-dom":295}],328:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var MenuBar = function (_Component) {
-	_inherits(MenuBar, _Component);
-
-	function MenuBar() {
-		_classCallCheck(this, MenuBar);
-
-		return _possibleConstructorReturn(this, (MenuBar.__proto__ || Object.getPrototypeOf(MenuBar)).apply(this, arguments));
-	}
-
-	_createClass(MenuBar, [{
-		key: 'render',
-		value: function render() {
-			return _react2.default.createElement(
-				'div',
-				null,
-				'placeholder'
-			);
-		}
-	}]);
-
-	return MenuBar;
-}(_react.Component);
-
-MenuBar.defaultProps = {
-	title: 'Defualt Title'
-};
-
-exports.default = MenuBar;
-
-},{"react":320}],329:[function(require,module,exports){
+},{"./components/NoMatch":329,"./components/SampleComponent":330,"./containers/NavBarContainer":331,"react":320,"react-dom":267,"react-router-dom":295}],328:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45301,7 +45247,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function NavBar(props) {
 	return _react2.default.createElement(
 		_reactBootstrap.Navbar,
-		{ className: 'fixed-top', inverse: true, toggleable: true },
+		{ className: 'fixed-top', inverse: true, collapseOnSelect: true },
 		_react2.default.createElement(
 			_reactBootstrap.Navbar.Header,
 			null,
@@ -45314,36 +45260,41 @@ function NavBar(props) {
 					_react2.default.createElement(_reactFontawesome2.default, { className: 'nav-link', icon: _fontawesomeFreeSolid.faUtensils }),
 					'RecipeBox'
 				)
-			)
+			),
+			_react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
 		),
 		_react2.default.createElement(
-			_reactBootstrap.Nav,
+			_reactBootstrap.Navbar.Collapse,
 			null,
-			props.links.map(function (link, i) {
-				var lc = link.title.toLowerCase().split(' ').join('-');
-				return _react2.default.createElement(
-					_reactBootstrap.NavItem,
-					{
-						key: lc,
-						className: props.active === lc ? 'active' : '',
-						id: lc,
-						onClick: props.setActive,
-						href: '#' + link.href },
-					_react2.default.createElement(
-						_reactRouterDom.Link,
+			_react2.default.createElement(
+				_reactBootstrap.Nav,
+				null,
+				props.links.map(function (link, i) {
+					var lc = link.title.toLowerCase().split(' ').join('-');
+					return _react2.default.createElement(
+						_reactBootstrap.NavItem,
 						{
-							to: link.href,
-							style: { textDecoration: 'none' },
-							className: 'nav-link' },
-						link.title
-					)
-				);
-			})
+							key: lc,
+							className: props.active === lc ? 'active' : '',
+							id: lc,
+							onClick: props.setActive,
+							href: '#' + link.href },
+						_react2.default.createElement(
+							_reactRouterDom.Link,
+							{
+								to: link.href,
+								style: { textDecoration: 'none' },
+								className: 'nav-link' },
+							link.title
+						)
+					);
+				})
+			)
 		)
 	);
 }
 
-},{"@fortawesome/fontawesome-free-solid":1,"@fortawesome/react-fontawesome":3,"react":320,"react-bootstrap":254,"react-router-dom":295}],330:[function(require,module,exports){
+},{"@fortawesome/fontawesome-free-solid":1,"@fortawesome/react-fontawesome":3,"react":320,"react-bootstrap":254,"react-router-dom":295}],329:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45405,7 +45356,7 @@ var NoMatch = function (_Component) {
 
 exports.default = NoMatch;
 
-},{"react":320}],331:[function(require,module,exports){
+},{"react":320}],330:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45455,7 +45406,7 @@ var SampleComponent = function (_Component) {
 
 exports.default = SampleComponent;
 
-},{"react":320}],332:[function(require,module,exports){
+},{"react":320}],331:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45535,4 +45486,4 @@ var NavBarContainer = function (_Component) {
 
 exports.default = NavBarContainer;
 
-},{"../components/NavBar":329,"react":320}]},{},[327]);
+},{"../components/NavBar":328,"react":320}]},{},[327]);
