@@ -8,7 +8,6 @@ export default class NavBarContainer extends Component {
 
 		this.state = {
 			active: '',
-			isOpen: false
 		}
 
 		this.setActive = this.setActive.bind(this);

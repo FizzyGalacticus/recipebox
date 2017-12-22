@@ -6,7 +6,7 @@ import { faUtensils } from '@fortawesome/fontawesome-free-solid';
 
 export default function NavBar(props) {
 	return (
-		<Navbar className='fixed-top' inverse toggleable>
+		<Navbar className='fixed-top' inverse collapseOnSelect>
 			<Navbar.Header>
 				<Navbar.Brand>
 					<a className='nav-link' href="/#/home">
@@ -14,8 +14,10 @@ export default function NavBar(props) {
 						RecipeBox
 					</a>
 				</Navbar.Brand>
+				<Navbar.Toggle />
 			</Navbar.Header>
 			
+			<Navbar.Collapse>
 			<Nav>
 			{props.links.map( (link,i) => {
 				let lc = link.title.toLowerCase().split(' ').join('-');
@@ -36,7 +38,8 @@ export default function NavBar(props) {
 				)
 			})}
 			</Nav>
-
+			</Navbar.Collapse>
+						
 		</Navbar>
 	);
 }
