@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, NavbarToggler, NavbarBrand, Nav, NavItem } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faUtensils } from '@fortawesome/fontawesome-free-solid';
 
@@ -20,26 +20,29 @@ export default function NavBar(props) {
 			<Navbar.Collapse>
 			<Nav>
 			{props.links.map( (link,i) => {
-				let lc = link.title.toLowerCase().split(' ').join('-');
-				return (
-					<NavItem 
-						key={lc}
-						className={props.active === lc ? 'active' : ''}
-						id={lc}
-						onClick={props.setActive} 
-						href={`#${link.href}`} >
-						<Link 
-							to={link.href} 
-							style={{textDecoration:'none'}}
-							className='nav-link' >
-							{link.title}
-						</Link>
-					</NavItem>
-				)
+				if (link.display == undefined || link.display) {
+					let lc = link.title.toLowerCase().split(' ').join('-');
+					return (
+						<NavItem 
+							key={lc}
+							className={props.active === lc ? 'active' : ''}
+							id={lc}
+							onClick={props.setActive} 
+							href={`#${link.href}`} >
+							<Link 
+								to={link.href} 
+								style={{textDecoration:'none'}}
+								className='nav-link' >
+								{link.title}
+							</Link>
+						</NavItem>
+					)
+				}
+				return null;
 			})}
 			</Nav>
 			</Navbar.Collapse>
-						
+
 		</Navbar>
 	);
 }

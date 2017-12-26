@@ -4,47 +4,13 @@ import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import SampleComponent from './components/SampleComponent';
 import NoMatch from './components/NoMatch';
+
 import NavBarContainer from './containers/NavBarContainer';
+import RecipeContainer from './containers/RecipeContainer';
 
 let socket = io(`https://localhost`);
 
-socket.on('getRecipe', (response) => {
-	console.log(response);
-});
-
-socket.on('getInstruction', (response) => {
-	console.log(response);
-});
-
-socket.on('getIngredient', (response) => {
-	console.log(response);
-});
-
-socket.on('getMeasurement', (response) => {
-	console.log(response);
-});
-
-socket.on('getUser', (response) => {
-	console.log(response);
-});
-
-socket.emit('getRecipe');
-socket.emit('getInstruction');
-socket.emit('getIngredient');
-socket.emit('getMeasurement');
-socket.emit('getUser');
-
-const SampleComponentWrapper = props => {
-			return (
-				<SampleComponent
-					msg="hello world"
-					{...props}
-				/>
-			);
-		}
-
-// add new links to this object
-const LINKS = [
+var ROUTES = [
 	{
 		'title':'Home',
 		'href':'/home',
@@ -80,18 +46,60 @@ const LINKS = [
 				/>
 			);
 		}
+	},
+	{
+		'title':'Recipe',
+		'href':'/recipe/:recipeID',
+		'display': false,
+		'component': (props) => {
+			return (
+				<RecipeContainer
+					socket={socket}
+					{...props}
+				/>
+			)
+		}
 	}
 ];
 
+
+// socket.on('getRecipe', (response) => {
+// 	console.log(response);
+// });
+
+// socket.on('getInstruction', (response) => {
+// 	console.log(response);
+// });
+
+// socket.on('getIngredient', (response) => {
+// 	console.log(response);
+// });
+
+// socket.on('getMeasurement', (response) => {
+// 	console.log(response);
+// });
+
+// socket.on('getUser', (response) => {
+// 	console.log(response);
+// });
+
+// socket.emit('getRecipe');
+// socket.emit('getInstruction');
+// socket.emit('getIngredient');
+// socket.emit('getMeasurement');
+// socket.emit('getUser');
+
+
 class Layout extends Component {
 	render() {
-
 		return (
 			<HashRouter>
-				<div className='containter content-container' >
-					<NavBarContainer links={LINKS} />
+				<div>
+					<NavBarContainer links={ROUTES} />
+
+					<div className='container'>
 					<Switch>
-						{LINKS.map( (link,i) => {
+						{ROUTES.map( (link,i) => {
 							return (
 								<Route 
 									path={link.href} 
@@ -102,6 +110,7 @@ class Layout extends Component {
 						<Redirect exact from="/" to="/home" />
 						<Route component={NoMatch} />
 					</Switch>
+					</div>
 				</div>
 			</HashRouter>
 		);
