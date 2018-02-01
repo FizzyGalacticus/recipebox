@@ -12,6 +12,7 @@ let imagemin = require('gulp-imagemin');
 let cssmin = require('gulp-cssmin');
 let sequence = require('gulp-sequence');
 let fs = require('fs');
+let livereload = require('gulp-livereload');
 
 let getSymverFromPackage = () => {
 	let pkg = require('./package.json');
@@ -84,12 +85,13 @@ gulp.task('compile-scripts', () => {
     .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('min-scripts', () => {
+gulp.task('min-scripts', ['compile-scripts'], () => {
 	return gulp.src(['dist/js/app.js'])
 	.pipe(plumber())
 	.pipe(uglify())
 	.pipe(rename({suffix:'.min'}))
-    .pipe(gulp.dest('dist/js'));
+    .pipe(gulp.dest('dist/js'))
+	.pipe(livereload());
 });
 
 gulp.task('min-html', () => {
@@ -106,7 +108,8 @@ gulp.task('min-html', () => {
 		removeOptionalTags: true,
 		removeRedundantAttributes: true
 	}))
-	.pipe(gulp.dest('dist'));
+	.pipe(gulp.dest('dist'))
+	.pipe(livereload());
 });
 
 gulp.task('sass', () => {
@@ -119,7 +122,8 @@ gulp.task('sass', () => {
 	.pipe(concat('app.css'))
 	.pipe(cssmin())
 	.pipe(rename({suffix: '.min'}))
-	.pipe(gulp.dest('dist/css'));
+	.pipe(gulp.dest('dist/css'))
+	.pipe(livereload());
 });
 
 gulp.task('fonts', () => {
@@ -131,7 +135,8 @@ gulp.task('fonts', () => {
 			  fontDir + '*.svg', 
 			  fontDir + '*.eot'])
 	.pipe(plumber())
-	.pipe(gulp.dest('dist/fonts'));
+	.pipe(gulp.dest('dist/fonts'))
+	.pipe(livereload());
 });
 
 gulp.task('min-image', () => {
@@ -146,11 +151,11 @@ gulp.task('prod', () => {
 });
 
 gulp.task('all', (callback) => {
-	sequence('prod', 'compile-scripts', 'min-scripts', ['min-html', 'sass', 'fonts'])(callback);
+	sequence('prod', ['min-scripts', 'min-html', 'sass', 'fonts'])(callback);
 });
 
 gulp.task('watch-scripts', () => {
-	gulp.watch('www/js/**/*.js', ['compile-scripts', 'min-scripts']);
+	gulp.watch('www/js/**/*.js', ['min-scripts']);
 });
 
 gulp.task('watch-html', () => {
@@ -169,4 +174,11 @@ gulp.task('watch-img', () => {
 	gulp.watch(['www/img/**'], ['min-image']);
 });
 
-gulp.task('default', sequence('all', ['watch-scripts', 'watch-html', 'watch-sass', 'watch-fonts', 'watch-img']));
+gulp.task('livereload', () => {
+	livereload.listen({
+		start: true,
+		reloadPage: 'dist/index.html',
+	});
+});
+
+gulp.task('default', sequence('all', ['watch-scripts', 'watch-html', 'watch-sass', 'watch-fonts', 'watch-img', 'livereload']));
