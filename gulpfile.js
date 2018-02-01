@@ -26,14 +26,36 @@ let writeSymverToPackage = (symverStr) => {
 	fs.writeFileSync('./package.json', JSON.stringify(pkg, 0, 4));
 };
 
+let createGitTag = (symver) => {
+	exec(`git commit -am "Updated version to ${symver}"`, {cwd: __dirname}, (err, stdout, stderr) => {
+		if(err)
+			throw new Error(err);
+		else {
+			exec(`git tag v${symver}`, {cwd: __dirname}, (err, stdout, stderr) => {
+				if(err)
+					throw new Error(err);
+			});
+		}
+	});
+};
+
 let bumpVersion = (index) => {
-	let symverStr = getSymverFromPackage();
-	let versions = symverStr.split('.');
+	let originalSymver = getSymverFromPackage();
+	let versions = originalSymver.split('.');
 
 	versions[index]++;
 
-	symverStr = `${versions[0]}.${versions[1]}.${versions[2]}`;
-	writeSymverToPackage(symverStr);
+	versions.forEach((version, i) => {
+		if(i > index)
+			versions[i] = 0;
+	});
+
+	let newSymver = `${versions[0]}.${versions[1]}.${versions[2]}`;
+	writeSymverToPackage(newSymver);
+	
+	setTimeout(() => {
+		createGitTag(newSymver);
+	}, 7000);
 };
 
 gulp.task('bump-major', () => {
