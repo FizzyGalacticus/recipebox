@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-import NavBar from '../components/NavBar';
+import NavBar from '../components/Navbar';
 
 export default class NavBarContainer extends Component {
 	constructor(props) {
