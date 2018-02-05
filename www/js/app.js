@@ -5,7 +5,7 @@ import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 import SampleComponent from './components/SampleComponent';
 import NoMatch from './components/NoMatch';
 
-import NavBarContainer from './containers/NavBarContainer';
+import NavBarContainer from './containers/NavbarContainer';
 import RecipeContainer from './containers/RecipeContainer';
 
 let socket = io(`https://localhost`);
