@@ -10,7 +10,6 @@ import RecipeContainer from './containers/RecipeContainer';
 import RecipesContainer from './containers/RecipesContainer';
 import NewRecipeContainer from './containers/NewRecipeContainer';
 
-
 var ROUTES = [
 	{
 		'title':'Home',
