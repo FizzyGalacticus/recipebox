@@ -5,8 +5,10 @@ import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 import SampleComponent from './components/SampleComponent';
 import NoMatch from './components/NoMatch';
 
-import NavBarContainer from './containers/NavBarContainer';
+import NavbarContainer from './containers/NavBarContainer';
 import RecipeContainer from './containers/RecipeContainer';
+import RecipesContainer from './containers/RecipesContainer';
+import NewRecipeContainer from './containers/NewRecipeContainer';
 
 let socket = io(`https://localhost`);
 
@@ -59,6 +61,30 @@ var ROUTES = [
 				/>
 			)
 		}
+	},
+	{
+		'title':'Recipes',
+		'href':'/recipes',
+		'component': (props) => {
+			return (
+				<RecipesContainer
+					socket={socket}
+					{...props}
+				/>
+			)	
+		}
+	},
+	{
+		'title':'New Recipe',
+		'href':'/new-recipe',
+		'component': (props) => {
+			return (
+				<NewRecipeContainer 
+					socket={socket}
+					{...props}
+				/>
+			)
+		}
 	}
 ];
 
@@ -95,7 +121,7 @@ class Layout extends Component {
 		return (
 			<HashRouter>
 				<div>
-					<NavBarContainer links={ROUTES} />
+					<NavbarContainer links={ROUTES} />
 
 					<div className='container'>
 					<Switch>

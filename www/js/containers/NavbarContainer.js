@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import NavBar from '../components/NavBar';
+import Navbar from '../components/Navbar';
 
-export default class NavBarContainer extends Component {
+export default class NavbarContainer extends Component {
 	constructor(props) {
 		super(props);
 
@@ -21,19 +21,31 @@ export default class NavBarContainer extends Component {
 		});
 	}
 
-	setActive(e) {
+	componentWillUnmount() {
+		console.log('Navbar: componentWillUnmount')
+	}
+
+	componentDidCatch(error, info) {
+		console.log(info);
+		console.log(error);
+	}
+
+	setActive(lc,url) {
 		console.log('Navbar: setActive');
 
 		this.setState({
-			active: (e.target.parentElement.id != '' ?  e.target.parentElement.id : e.target.id)
+			active: lc
+		}, () => {
+			window.location.hash = `#${url}`;
 		});
+
 	}
 
 	render() {
 		console.log('Navbar: rendering');
 
 		return (
-			<NavBar 
+			<Navbar 
 				id='recipebox-navbar'
 				links={this.props.links} 
 				active={this.state.active}

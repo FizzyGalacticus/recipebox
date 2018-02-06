@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, NavbarToggler, NavbarBrand, Nav, NavItem } from 'react-bootstrap';
+import { Navbar as BSNavbar, Nav, NavItem } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faUtensils } from '@fortawesome/fontawesome-free-solid';
 
-export default function NavBar(props) {
+export default function Navbar(props) {
 	return (
-		<Navbar className='fixed-top' inverse collapseOnSelect>
-			<Navbar.Header>
-				<Navbar.Brand>
+		<BSNavbar className='fixed-top' inverse collapseOnSelect>
+			<BSNavbar.Header>
+				<BSNavbar.Brand>
 					<a className='nav-link' href="/#/home">
 						<FontAwesomeIcon className="nav-link" icon={faUtensils} />
 						RecipeBox
 					</a>
-				</Navbar.Brand>
-				<Navbar.Toggle />
-			</Navbar.Header>
+				</BSNavbar.Brand>
+				<BSNavbar.Toggle />
+			</BSNavbar.Header>
 			
-			<Navbar.Collapse>
+			<BSNavbar.Collapse>
 			<Nav>
 			{props.links.map( (link,i) => {
 				if (link.display == undefined || link.display) {
@@ -27,7 +27,7 @@ export default function NavBar(props) {
 							key={lc}
 							className={props.active === lc ? 'active' : ''}
 							id={lc}
-							onClick={props.setActive} 
+							onClick={() => {props.setActive(lc,link.href)}} 
 							href={`#${link.href}`} >
 							<Link 
 								to={link.href} 
@@ -41,8 +41,8 @@ export default function NavBar(props) {
 				return null;
 			})}
 			</Nav>
-			</Navbar.Collapse>
+			</BSNavbar.Collapse>
 
-		</Navbar>
+		</BSNavbar>
 	);
 }
