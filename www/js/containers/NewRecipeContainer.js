@@ -9,18 +9,19 @@ import NewRecipe from '../components/NewRecipe';
 //   return data;
 // }, {});
 
-function formToJSON(elements) {
-	[].reduce.call(elements, (data,element) => {
-		data[element.name] = element.value;
-		return data;
-	},{})
-}
+// function formToJSON(elements) {
+// 	[].reduce.call(elements, (data,element) => {
+// 		data[element.name] = element.value;
+// 		return data;
+// 	},{})
+// }
 
 export default class NewRecipeContainer extends Component {
 	constructor(props) {
 		super(props);
 
 		this.submit = this.submit.bind(this);
+		this.updateRecipeArray = this.updateRecipeArray.bind(this);
 	}
 
 	componentWillMount() {
@@ -40,9 +41,9 @@ export default class NewRecipeContainer extends Component {
 
 	submit(event) {
 		event.preventDefault();
-		// console.log(event);
-		let form = document.getElementById('newRecipeForm')[0];
-		console.log(formToJSON(form.elements));
+		console.log(event);
+		// let form = document.getElementById('newRecipeForm')[0];
+		// console.log(formToJSON(form.elements));
 		// document.getElementById('newRecipeForm');
 	}
 
@@ -51,11 +52,16 @@ export default class NewRecipeContainer extends Component {
 		console.log(error);
 	}
 
+	updateRecipeArray(listObject){
+		this.setState(listObject);
+	}
+
 	render() {
 		console.log('NewRecipe: rendering');
 		return (
 			<NewRecipe 
 				submit={this.submit}
+				updateArray={this.updateArray}
 			/>
 		)
 	}
