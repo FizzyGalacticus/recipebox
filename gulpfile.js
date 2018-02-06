@@ -177,7 +177,7 @@ gulp.task('watch-img', () => {
 gulp.task('livereload', () => {
 	livereload.listen({
 		start: true,
-		reloadPage: 'dist/index.html',
+		reloadPage: './dist/index.html',
 	});
 });
 
