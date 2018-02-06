@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Recipes from '../components/Recipes';
+import { socket } from '../SocketIO';
 
 export default class RecipesContainer extends Component {
 	constructor(props) {
@@ -15,12 +16,12 @@ export default class RecipesContainer extends Component {
 
 	componentWillMount() {
 		console.log('Recipes: willMount');
-		this.props.socket.emit('getRecipe',{});
+		socket.emit('getRecipe',{});
 	}
 
 	componentDidMount() {
 		console.log('Recipes: didMount');
-		this.props.socket.on('getRecipe', (response) => {
+		socket.on('getRecipe', (response) => {
 			// console.log(response.recipes[0]);
 			this.setState({
 				recipes: response.recipes
@@ -35,7 +36,7 @@ export default class RecipesContainer extends Component {
 
 	loadRecipe(recipeID) {
 		window.location.hash = `#/recipe/${recipeID}`;
-		// console.log("hello world" + recipeID);
+		// console.log("recipe " + recipeID);
 	}
 
 	render() {
