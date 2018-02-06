@@ -45814,11 +45814,11 @@ var NewRecipeContainer = function (_Component) {
 			console.log(info);
 			console.log(error);
 		}
-	}, {
-		key: 'updateRecipeArray',
-		value: function updateRecipeArray(listObject) {
-			this.setState(listObject);
-		}
+
+		// updateRecipeArray(listObject){
+		// 	this.setState(listObject);
+		// }
+
 	}, {
 		key: 'render',
 		value: function render() {

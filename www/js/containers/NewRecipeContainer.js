@@ -52,9 +52,9 @@ export default class NewRecipeContainer extends Component {
 		console.log(error);
 	}
 
-	updateRecipeArray(listObject){
-		this.setState(listObject);
-	}
+	// updateRecipeArray(listObject){
+	// 	this.setState(listObject);
+	// }
 
 	render() {
 		console.log('NewRecipe: rendering');
