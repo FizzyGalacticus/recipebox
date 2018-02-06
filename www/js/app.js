@@ -10,7 +10,6 @@ import RecipeContainer from './containers/RecipeContainer';
 import RecipesContainer from './containers/RecipesContainer';
 import NewRecipeContainer from './containers/NewRecipeContainer';
 
-let socket = io(`https://localhost`);
 
 var ROUTES = [
 	{
@@ -26,37 +25,12 @@ var ROUTES = [
 		}
 	},
 	{
-		'title':'About',
-		'href':'/about',
-		'component': (props) => {
-			return (
-				<SampleComponent
-					msg="yolo"
-					{...props}
-				/>
-			);
-		}
-	},
-	{
-		'title':'Contact',
-		'href':'/contact',
-		'component': (props) => {
-			return (
-				<SampleComponent
-					msg="contact page"
-					{...props}
-				/>
-			);
-		}
-	},
-	{
 		'title':'Recipe',
 		'href':'/recipe/:recipeID',
 		'display': false,
 		'component': (props) => {
 			return (
 				<RecipeContainer
-					socket={socket}
 					{...props}
 				/>
 			)
@@ -68,7 +42,6 @@ var ROUTES = [
 		'component': (props) => {
 			return (
 				<RecipesContainer
-					socket={socket}
 					{...props}
 				/>
 			)	
@@ -80,7 +53,6 @@ var ROUTES = [
 		'component': (props) => {
 			return (
 				<NewRecipeContainer 
-					socket={socket}
 					{...props}
 				/>
 			)
