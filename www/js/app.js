@@ -5,7 +5,7 @@ import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 import SampleComponent from './components/SampleComponent';
 import NoMatch from './components/NoMatch';
 
-import NavbarContainer from './containers/NavBarContainer';
+import NavbarContainer from './containers/NavbarContainer';
 import RecipeContainer from './containers/RecipeContainer';
 import RecipesContainer from './containers/RecipesContainer';
 import NewRecipeContainer from './containers/NewRecipeContainer';
