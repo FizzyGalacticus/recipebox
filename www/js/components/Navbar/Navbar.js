@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-import Navbar from '../components/Navbar';
+import NavbarStateless from './NavbarStateless';
 
 export default class NavbarContainer extends Component {
 	constructor(props) {
@@ -45,7 +45,7 @@ export default class NavbarContainer extends Component {
 		console.log('Navbar: rendering');
 
 		return (
-			<Navbar 
+			<NavbarStateless 
 				id='recipebox-navbar'
 				links={this.props.links} 
 				active={this.state.active}

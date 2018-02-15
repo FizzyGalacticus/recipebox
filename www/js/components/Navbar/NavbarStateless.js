@@ -4,7 +4,7 @@ import { Navbar as BSNavbar, Nav, NavItem } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faUtensils } from '@fortawesome/fontawesome-free-solid';
 
-export default function Navbar(props) {
+export default function NavbarStateless(props) {
 	return (
 		<BSNavbar className='fixed-top' inverse collapseOnSelect>
 			<BSNavbar.Header>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default function Recipe(props) {
+export default function RecipeStateless(props) {
 	return (
 		<div>
 		{

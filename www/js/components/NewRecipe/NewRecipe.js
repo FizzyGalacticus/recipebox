@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import NewRecipe from '../components/NewRecipe';
+import NewRecipeStateless from './NewRecipeStateless.js';
 
 // import formToJSON from '../lib.js';
 
@@ -52,14 +52,14 @@ export default class NewRecipeContainer extends Component {
 		console.log(error);
 	}
 
-	// updateRecipeArray(listObject){
-	// 	this.setState(listObject);
-	// }
+	updateRecipeArray(listObject){
+		this.setState(listObject);
+	}
 
 	render() {
 		console.log('NewRecipe: rendering');
 		return (
-			<NewRecipe 
+			<NewRecipeStateless 
 				submit={this.submit}
 				updateArray={this.updateArray}
 			/>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { Jumbotron } from 'react-bootstrap';
 
-export default function Recipes(props) {
+export default function RecipesStateless(props) {
 	return (
 		<div>
 		{	

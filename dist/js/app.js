@@ -45199,8 +45199,6 @@ var socket = exports.socket = SocketIO.getInstance();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -45219,21 +45217,23 @@ var _NoMatch = require('./components/NoMatch');
 
 var _NoMatch2 = _interopRequireDefault(_NoMatch);
 
-var _NavbarContainer = require('./containers/NavbarContainer');
+var _Navbar = require('./components/Navbar');
 
-var _NavbarContainer2 = _interopRequireDefault(_NavbarContainer);
+var _Navbar2 = _interopRequireDefault(_Navbar);
 
-var _RecipeContainer = require('./containers/RecipeContainer');
+var _Recipe = require('./components/Recipe');
 
-var _RecipeContainer2 = _interopRequireDefault(_RecipeContainer);
+var _Recipe2 = _interopRequireDefault(_Recipe);
 
-var _RecipesContainer = require('./containers/RecipesContainer');
+var _Recipes = require('./components/Recipes');
 
-var _RecipesContainer2 = _interopRequireDefault(_RecipesContainer);
+var _Recipes2 = _interopRequireDefault(_Recipes);
 
-var _NewRecipeContainer = require('./containers/NewRecipeContainer');
+var _NewRecipe = require('./components/NewRecipe');
 
-var _NewRecipeContainer2 = _interopRequireDefault(_NewRecipeContainer);
+var _NewRecipe2 = _interopRequireDefault(_NewRecipe);
+
+var _routes = require('./routes.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45242,35 +45242,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ROUTES = [{
-	'title': 'Home',
-	'href': '/home',
-	'component': function component(props) {
-		return _react2.default.createElement(_SampleComponent2.default, _extends({
-			msg: 'hello world, this is a placeholder for a home page'
-		}, props));
-	}
-}, {
-	'title': 'Recipe',
-	'href': '/recipe/:recipeID',
-	'display': false,
-	'component': function component(props) {
-		return _react2.default.createElement(_RecipeContainer2.default, props);
-	}
-}, {
-	'title': 'Recipes',
-	'href': '/recipes',
-	'component': function component(props) {
-		return _react2.default.createElement(_RecipesContainer2.default, props);
-	}
-}, {
-	'title': 'New Recipe',
-	'href': '/new-recipe',
-	'component': function component(props) {
-		return _react2.default.createElement(_NewRecipeContainer2.default, props);
-	}
-}];
 
 // socket.on('getRecipe', (response) => {
 // 	console.log(response);
@@ -45317,14 +45288,14 @@ var Layout = function (_Component) {
 				_react2.default.createElement(
 					'div',
 					null,
-					_react2.default.createElement(_NavbarContainer2.default, { links: ROUTES }),
+					_react2.default.createElement(_Navbar2.default, { links: _routes.ROUTES }),
 					_react2.default.createElement(
 						'div',
 						{ className: 'container' },
 						_react2.default.createElement(
 							_reactRouterDom.Switch,
 							null,
-							ROUTES.map(function (link, i) {
+							_routes.ROUTES.map(function (link, i) {
 								return _react2.default.createElement(_reactRouterDom.Route, {
 									path: link.href,
 									component: link.component });
@@ -45345,13 +45316,254 @@ var app = document.getElementById('app');
 
 _reactDom2.default.render(_react2.default.createElement(Layout, null), app);
 
-},{"./components/NoMatch":331,"./components/SampleComponent":334,"./containers/NavbarContainer":335,"./containers/NewRecipeContainer":336,"./containers/RecipeContainer":337,"./containers/RecipesContainer":338,"react":320,"react-dom":275,"react-router-dom":303}],329:[function(require,module,exports){
+},{"./components/Navbar":333,"./components/NewRecipe":336,"./components/NoMatch":338,"./components/Recipe":341,"./components/Recipes":344,"./components/SampleComponent":346,"./routes.js":347,"react":320,"react-dom":275,"react-router-dom":303}],329:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.default = Navbar;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _reactBootstrap = require('react-bootstrap');
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FormList = function (_Component) {
+	_inherits(FormList, _Component);
+
+	function FormList(props) {
+		_classCallCheck(this, FormList);
+
+		var _this = _possibleConstructorReturn(this, (FormList.__proto__ || Object.getPrototypeOf(FormList)).call(this, props));
+
+		_this.state = {
+			listItems: _this.props.listItems,
+			enterItemValue: ''
+		};
+
+		_this.handleNewItemChange = _this.handleNewItemChange.bind(_this);
+		_this.addNewItem = _this.addNewItem.bind(_this);
+		return _this;
+	}
+
+	_createClass(FormList, [{
+		key: 'componentWillMount',
+		value: function componentWillMount() {
+			// console.log('FormList willMount');
+		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			// console.log('FormList didMount');
+		}
+	}, {
+		key: 'handleNewItemChange',
+		value: function handleNewItemChange(e) {
+			this.setState({
+				enterItemValue: e.target.value
+			});
+		}
+	}, {
+		key: 'addNewItem',
+		value: function addNewItem(e) {
+			this.setState({
+				listItems: [].concat(_toConsumableArray(this.state.listItems), [this.state.enterItemValue]),
+				enterItemValue: ''
+			});
+
+			this.props.onChange([this.state.listItems]);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return React.createElement(
+				_reactBootstrap.Grid,
+				null,
+				React.createElement(
+					_reactBootstrap.Row,
+					null,
+					React.createElement(
+						_reactBootstrap.Col,
+						{ xs: 12, sm: 12, md: 12, lg: 12 },
+						React.createElement(
+							_reactBootstrap.ListGroup,
+							null,
+							this.state.listItems.map(function (item, index) {
+								return React.createElement(
+									_reactBootstrap.ListGroupItem,
+									{ key: index },
+									index + 1,
+									'. ',
+									item
+								);
+							}),
+							React.createElement(
+								_reactBootstrap.ListGroupItem,
+								null,
+								React.createElement(
+									_reactBootstrap.Row,
+									null,
+									React.createElement(
+										_reactBootstrap.Col,
+										{ xs: 6, sm: 6, md: 6, lg: 6 },
+										React.createElement(_reactBootstrap.FormControl, {
+											type: 'text',
+											value: this.state.enterItemValue,
+											placeholder: 'Add new item',
+											onChange: this.handleNewItemChange })
+									),
+									React.createElement(
+										_reactBootstrap.Col,
+										{ xs: 6, sm: 6, md: 6, lg: 6 },
+										React.createElement(
+											_reactBootstrap.Button,
+											{ onClick: this.addNewItem },
+											'+'
+										)
+									)
+								)
+							)
+						)
+					)
+				)
+			);
+		}
+	}]);
+
+	return FormList;
+}(_react.Component);
+
+exports.default = FormList;
+
+
+FormList.defaultProps = {
+	listItems: [],
+	onChange: function onChange(e) {
+		return null;
+	}
+};
+
+},{"react":320,"react-bootstrap":262}],330:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _FormList = require('./FormList.js');
+
+var _FormList2 = _interopRequireDefault(_FormList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _FormList2.default;
+
+},{"./FormList.js":329}],331:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _NavbarStateless = require('./NavbarStateless');
+
+var _NavbarStateless2 = _interopRequireDefault(_NavbarStateless);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NavbarContainer = function (_Component) {
+	_inherits(NavbarContainer, _Component);
+
+	function NavbarContainer(props) {
+		_classCallCheck(this, NavbarContainer);
+
+		var _this = _possibleConstructorReturn(this, (NavbarContainer.__proto__ || Object.getPrototypeOf(NavbarContainer)).call(this, props));
+
+		_this.state = {
+			active: ''
+		};
+
+		_this.setActive = _this.setActive.bind(_this);
+		return _this;
+	}
+
+	_createClass(NavbarContainer, [{
+		key: 'componentWillMount',
+		value: function componentWillMount() {
+			console.log('Navbar: componentWillMount');
+
+			this.setState({
+				active: window.location.pathname.split('/')[1]
+			});
+		}
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			console.log('Navbar: componentWillUnmount');
+		}
+	}, {
+		key: 'componentDidCatch',
+		value: function componentDidCatch(error, info) {
+			console.log(info);
+			console.log(error);
+		}
+	}, {
+		key: 'setActive',
+		value: function setActive(lc, url) {
+			console.log('Navbar: setActive');
+
+			this.setState({
+				active: lc
+			}, function () {
+				window.location.hash = '#' + url;
+			});
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			console.log('Navbar: rendering');
+
+			return React.createElement(_NavbarStateless2.default, {
+				id: 'recipebox-navbar',
+				links: this.props.links,
+				active: this.state.active,
+				click: this.setActive,
+				setActive: this.setActive
+			});
+		}
+	}]);
+
+	return NavbarContainer;
+}(_react.Component);
+
+exports.default = NavbarContainer;
+
+},{"./NavbarStateless":332,"react":320}],332:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = NavbarStateless;
 
 var _react = require('react');
 
@@ -45369,7 +45581,7 @@ var _fontawesomeFreeSolid = require('@fortawesome/fontawesome-free-solid');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function Navbar(props) {
+function NavbarStateless(props) {
 	return _react2.default.createElement(
 		_reactBootstrap.Navbar,
 		{ className: 'fixed-top', inverse: true, collapseOnSelect: true },
@@ -45424,43 +45636,187 @@ function Navbar(props) {
 	);
 }
 
-},{"@fortawesome/fontawesome-free-solid":1,"@fortawesome/react-fontawesome":3,"react":320,"react-bootstrap":262,"react-router-dom":303}],330:[function(require,module,exports){
-"use strict";
+},{"@fortawesome/fontawesome-free-solid":1,"@fortawesome/react-fontawesome":3,"react":320,"react-bootstrap":262,"react-router-dom":303}],333:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Navbar = require('./Navbar.js');
+
+var _Navbar2 = _interopRequireDefault(_Navbar);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Navbar2.default;
+
+},{"./Navbar.js":331}],334:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.default = NewRecipe;
 
-var _react = require("react");
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _NewRecipeStateless = require('./NewRecipeStateless.js');
+
+var _NewRecipeStateless2 = _interopRequireDefault(_NewRecipeStateless);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function NewRecipe(props) {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import formToJSON from '../lib.js';
+
+// formToJSON = elements => [].reduce.call(elements, (data, element) => {
+//   data[element.name] = element.value;
+//   return data;
+// }, {});
+
+// function formToJSON(elements) {
+// 	[].reduce.call(elements, (data,element) => {
+// 		data[element.name] = element.value;
+// 		return data;
+// 	},{})
+// }
+
+var NewRecipeContainer = function (_Component) {
+	_inherits(NewRecipeContainer, _Component);
+
+	function NewRecipeContainer(props) {
+		_classCallCheck(this, NewRecipeContainer);
+
+		var _this = _possibleConstructorReturn(this, (NewRecipeContainer.__proto__ || Object.getPrototypeOf(NewRecipeContainer)).call(this, props));
+
+		_this.submit = _this.submit.bind(_this);
+		_this.updateRecipeArray = _this.updateRecipeArray.bind(_this);
+		return _this;
+	}
+
+	_createClass(NewRecipeContainer, [{
+		key: 'componentWillMount',
+		value: function componentWillMount() {
+			console.log('NewRecipe: willMount');
+			// this.props.socket.emit('getRecipe',{'_id': this.state.recipeID});
+		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			console.log('NewRecipe: didMount');
+			// this.props.socket.on('getRecipe', (response) => {
+			// 	// console.log(response.recipes[0]);
+			// 	this.setState({
+			// 		recipe: response.recipes[0]
+			// 	});
+			// });
+		}
+	}, {
+		key: 'submit',
+		value: function submit(event) {
+			event.preventDefault();
+			console.log(event);
+			// let form = document.getElementById('newRecipeForm')[0];
+			// console.log(formToJSON(form.elements));
+			// document.getElementById('newRecipeForm');
+		}
+	}, {
+		key: 'componentDidCatch',
+		value: function componentDidCatch(error, info) {
+			console.log(info);
+			console.log(error);
+		}
+	}, {
+		key: 'updateRecipeArray',
+		value: function updateRecipeArray(listObject) {
+			this.setState(listObject);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			console.log('NewRecipe: rendering');
+			return _react2.default.createElement(_NewRecipeStateless2.default, {
+				submit: this.submit,
+				updateArray: this.updateArray
+			});
+		}
+	}]);
+
+	return NewRecipeContainer;
+}(_react.Component);
+
+exports.default = NewRecipeContainer;
+
+},{"./NewRecipeStateless.js":335,"react":320}],335:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = NewRecipeStateless;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _FormList = require('../FormList');
+
+var _FormList2 = _interopRequireDefault(_FormList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function NewRecipeStateless(props) {
+	var _this = this;
+
 	return _react2.default.createElement(
-		"div",
+		'div',
 		null,
 		_react2.default.createElement(
-			"form",
-			{ id: "newRecipeForm", action: "post", onSubmit: props.submit },
+			'form',
+			{ id: 'newRecipeForm', action: 'post', onSubmit: props.submit },
+			_react2.default.createElement(_FormList2.default, { updateArray: function updateArray() {
+					return _this.updateArray([]);
+				} }),
 			_react2.default.createElement(
-				"label",
-				{ value: "Name" },
-				_react2.default.createElement("input", { type: "text", name: "name" })
+				'label',
+				{ value: 'Name' },
+				_react2.default.createElement('input', { type: 'text', name: 'name' })
 			),
-			_react2.default.createElement("input", { type: "text", name: "2" }),
+			_react2.default.createElement('input', { type: 'text', name: '2' }),
 			_react2.default.createElement(
-				"button",
+				'button',
 				null,
-				"Save"
+				'Save'
 			)
 		)
 	);
 }
 
-},{"react":320}],331:[function(require,module,exports){
+},{"../FormList":330,"react":320}],336:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _NewRecipe = require('./NewRecipe.js');
+
+var _NewRecipe2 = _interopRequireDefault(_NewRecipe);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _NewRecipe2.default;
+
+},{"./NewRecipe.js":334}],337:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45522,13 +45878,102 @@ var NoMatch = function (_Component) {
 
 exports.default = NoMatch;
 
-},{"react":320}],332:[function(require,module,exports){
+},{"react":320}],338:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _NoMatch = require('./NoMatch.js');
+
+var _NoMatch2 = _interopRequireDefault(_NoMatch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _NoMatch2.default;
+
+},{"./NoMatch.js":337}],339:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.default = Recipe;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _RecipeStateless = require('./RecipeStateless');
+
+var _RecipeStateless2 = _interopRequireDefault(_RecipeStateless);
+
+var _SocketIO = require('../../SocketIO');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var RecipeContainer = function (_Component) {
+	_inherits(RecipeContainer, _Component);
+
+	function RecipeContainer(props) {
+		_classCallCheck(this, RecipeContainer);
+
+		var _this = _possibleConstructorReturn(this, (RecipeContainer.__proto__ || Object.getPrototypeOf(RecipeContainer)).call(this, props));
+
+		_this.state = {
+			recipe: {},
+			recipeID: _this.props.match.params.recipeID
+		};
+		return _this;
+	}
+
+	_createClass(RecipeContainer, [{
+		key: 'componentWillMount',
+		value: function componentWillMount() {
+			console.log('RecipeContainer willMount');
+			_SocketIO.socket.emit('getRecipe', { '_id': this.state.recipeID });
+		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			var _this2 = this;
+
+			console.log('RecipeContainer didMount');
+			_SocketIO.socket.on('getRecipe', function (response) {
+				_this2.setState({
+					recipe: response.recipes[0]
+				});
+			});
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(_RecipeStateless2.default, {
+				recipe: this.state.recipe
+			});
+		}
+	}]);
+
+	return RecipeContainer;
+}(_react.Component);
+
+exports.default = RecipeContainer;
+
+},{"../../SocketIO":327,"./RecipeStateless":340,"react":320}],340:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = RecipeStateless;
 
 var _react = require('react');
 
@@ -45536,7 +45981,7 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function Recipe(props) {
+function RecipeStateless(props) {
 	return _react2.default.createElement(
 		'div',
 		null,
@@ -45614,383 +46059,22 @@ function Recipe(props) {
 	);
 }
 
-},{"react":320}],333:[function(require,module,exports){
+},{"react":320}],341:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = Recipes;
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = require('react-router-dom');
-
-var _reactBootstrap = require('react-bootstrap');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Recipes(props) {
-	return _react2.default.createElement(
-		'div',
-		null,
-		props.recipes != {} ? _react2.default.createElement(
-			'div',
-			null,
-			props.recipes.map(function (r) {
-				return _react2.default.createElement(
-					_reactBootstrap.Jumbotron,
-					{
-						className: 'recipeCard',
-						onClick: function onClick() {
-							props.loadRecipe(r._id);
-						} },
-					_react2.default.createElement(
-						'span',
-						null,
-						_react2.default.createElement(
-							'h2',
-							null,
-							r.name
-						)
-					),
-					_react2.default.createElement(
-						'span',
-						{ className: 'recipeCard-time' },
-						r.totalTime
-					)
-				);
-			})
-		) : _react2.default.createElement(
-			'div',
-			null,
-			'Error'
-		)
-	);
-}
-
-},{"react":320,"react-bootstrap":262,"react-router-dom":303}],334:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var SampleComponent = function (_Component) {
-	_inherits(SampleComponent, _Component);
-
-	function SampleComponent(props) {
-		_classCallCheck(this, SampleComponent);
-
-		return _possibleConstructorReturn(this, (SampleComponent.__proto__ || Object.getPrototypeOf(SampleComponent)).call(this, props));
-	}
-
-	_createClass(SampleComponent, [{
-		key: 'render',
-		value: function render() {
-			return _react2.default.createElement(
-				'div',
-				null,
-				_react2.default.createElement(
-					'p',
-					null,
-					this.props.msg
-				)
-			);
-		}
-	}]);
-
-	return SampleComponent;
-}(_react.Component);
-
-exports.default = SampleComponent;
-
-},{"react":320}],335:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _Navbar = require('../components/Navbar');
-
-var _Navbar2 = _interopRequireDefault(_Navbar);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var NavbarContainer = function (_Component) {
-	_inherits(NavbarContainer, _Component);
-
-	function NavbarContainer(props) {
-		_classCallCheck(this, NavbarContainer);
-
-		var _this = _possibleConstructorReturn(this, (NavbarContainer.__proto__ || Object.getPrototypeOf(NavbarContainer)).call(this, props));
-
-		_this.state = {
-			active: ''
-		};
-
-		_this.setActive = _this.setActive.bind(_this);
-		return _this;
-	}
-
-	_createClass(NavbarContainer, [{
-		key: 'componentWillMount',
-		value: function componentWillMount() {
-			console.log('Navbar: componentWillMount');
-
-			this.setState({
-				active: window.location.pathname.split('/')[1]
-			});
-		}
-	}, {
-		key: 'componentWillUnmount',
-		value: function componentWillUnmount() {
-			console.log('Navbar: componentWillUnmount');
-		}
-	}, {
-		key: 'componentDidCatch',
-		value: function componentDidCatch(error, info) {
-			console.log(info);
-			console.log(error);
-		}
-	}, {
-		key: 'setActive',
-		value: function setActive(lc, url) {
-			console.log('Navbar: setActive');
-
-			this.setState({
-				active: lc
-			}, function () {
-				window.location.hash = '#' + url;
-			});
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			console.log('Navbar: rendering');
-
-			return React.createElement(_Navbar2.default, {
-				id: 'recipebox-navbar',
-				links: this.props.links,
-				active: this.state.active,
-				click: this.setActive,
-				setActive: this.setActive
-			});
-		}
-	}]);
-
-	return NavbarContainer;
-}(_react.Component);
-
-exports.default = NavbarContainer;
-
-},{"../components/Navbar":329,"react":320}],336:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _NewRecipe = require('../components/NewRecipe');
-
-var _NewRecipe2 = _interopRequireDefault(_NewRecipe);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// import formToJSON from '../lib.js';
-
-// formToJSON = elements => [].reduce.call(elements, (data, element) => {
-//   data[element.name] = element.value;
-//   return data;
-// }, {});
-
-// function formToJSON(elements) {
-// 	[].reduce.call(elements, (data,element) => {
-// 		data[element.name] = element.value;
-// 		return data;
-// 	},{})
-// }
-
-var NewRecipeContainer = function (_Component) {
-	_inherits(NewRecipeContainer, _Component);
-
-	function NewRecipeContainer(props) {
-		_classCallCheck(this, NewRecipeContainer);
-
-		var _this = _possibleConstructorReturn(this, (NewRecipeContainer.__proto__ || Object.getPrototypeOf(NewRecipeContainer)).call(this, props));
-
-		_this.submit = _this.submit.bind(_this);
-		_this.updateRecipeArray = _this.updateRecipeArray.bind(_this);
-		return _this;
-	}
-
-	_createClass(NewRecipeContainer, [{
-		key: 'componentWillMount',
-		value: function componentWillMount() {
-			console.log('NewRecipe: willMount');
-			// this.props.socket.emit('getRecipe',{'_id': this.state.recipeID});
-		}
-	}, {
-		key: 'componentDidMount',
-		value: function componentDidMount() {
-			console.log('NewRecipe: didMount');
-			// this.props.socket.on('getRecipe', (response) => {
-			// 	// console.log(response.recipes[0]);
-			// 	this.setState({
-			// 		recipe: response.recipes[0]
-			// 	});
-			// });
-		}
-	}, {
-		key: 'submit',
-		value: function submit(event) {
-			event.preventDefault();
-			console.log(event);
-			// let form = document.getElementById('newRecipeForm')[0];
-			// console.log(formToJSON(form.elements));
-			// document.getElementById('newRecipeForm');
-		}
-	}, {
-		key: 'componentDidCatch',
-		value: function componentDidCatch(error, info) {
-			console.log(info);
-			console.log(error);
-		}
-
-		// updateRecipeArray(listObject){
-		// 	this.setState(listObject);
-		// }
-
-	}, {
-		key: 'render',
-		value: function render() {
-			console.log('NewRecipe: rendering');
-			return _react2.default.createElement(_NewRecipe2.default, {
-				submit: this.submit,
-				updateArray: this.updateArray
-			});
-		}
-	}]);
-
-	return NewRecipeContainer;
-}(_react.Component);
-
-exports.default = NewRecipeContainer;
-
-},{"../components/NewRecipe":330,"react":320}],337:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _Recipe = require('../components/Recipe');
+var _Recipe = require('./Recipe.js');
 
 var _Recipe2 = _interopRequireDefault(_Recipe);
 
-var _SocketIO = require('../SocketIO');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+exports.default = _Recipe2.default;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var RecipeContainer = function (_Component) {
-	_inherits(RecipeContainer, _Component);
-
-	function RecipeContainer(props) {
-		_classCallCheck(this, RecipeContainer);
-
-		var _this = _possibleConstructorReturn(this, (RecipeContainer.__proto__ || Object.getPrototypeOf(RecipeContainer)).call(this, props));
-
-		_this.state = {
-			recipe: {},
-			recipeID: _this.props.match.params.recipeID
-		};
-		return _this;
-	}
-
-	_createClass(RecipeContainer, [{
-		key: 'componentWillMount',
-		value: function componentWillMount() {
-			console.log('RecipeContainer willMount');
-			_SocketIO.socket.emit('getRecipe', { '_id': this.state.recipeID });
-		}
-	}, {
-		key: 'componentDidMount',
-		value: function componentDidMount() {
-			var _this2 = this;
-
-			console.log('RecipeContainer didMount');
-			_SocketIO.socket.on('getRecipe', function (response) {
-				_this2.setState({
-					recipe: response.recipes[0]
-				});
-			});
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			return _react2.default.createElement(_Recipe2.default, {
-				recipe: this.state.recipe
-			});
-		}
-	}]);
-
-	return RecipeContainer;
-}(_react.Component);
-
-exports.default = RecipeContainer;
-
-},{"../SocketIO":327,"../components/Recipe":332,"react":320}],338:[function(require,module,exports){
+},{"./Recipe.js":339}],342:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46003,11 +46087,11 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Recipes = require('../components/Recipes');
+var _RecipesStateless = require('./RecipesStateless');
 
-var _Recipes2 = _interopRequireDefault(_Recipes);
+var _RecipesStateless2 = _interopRequireDefault(_RecipesStateless);
 
-var _SocketIO = require('../SocketIO');
+var _SocketIO = require('../../SocketIO');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46067,7 +46151,7 @@ var RecipesContainer = function (_Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			return _react2.default.createElement(_Recipes2.default, {
+			return _react2.default.createElement(_RecipesStateless2.default, {
 				recipes: this.state.recipes,
 				loadRecipe: this.loadRecipe
 			});
@@ -46079,4 +46163,174 @@ var RecipesContainer = function (_Component) {
 
 exports.default = RecipesContainer;
 
-},{"../SocketIO":327,"../components/Recipes":333,"react":320}]},{},[328]);
+},{"../../SocketIO":327,"./RecipesStateless":343,"react":320}],343:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = RecipesStateless;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = require('react-router-dom');
+
+var _reactBootstrap = require('react-bootstrap');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function RecipesStateless(props) {
+	return _react2.default.createElement(
+		'div',
+		null,
+		props.recipes != {} ? _react2.default.createElement(
+			'div',
+			null,
+			props.recipes.map(function (r) {
+				return _react2.default.createElement(
+					_reactBootstrap.Jumbotron,
+					{
+						className: 'recipeCard',
+						onClick: function onClick() {
+							props.loadRecipe(r._id);
+						} },
+					_react2.default.createElement(
+						'span',
+						null,
+						_react2.default.createElement(
+							'h2',
+							null,
+							r.name
+						)
+					),
+					_react2.default.createElement(
+						'span',
+						{ className: 'recipeCard-time' },
+						r.totalTime
+					)
+				);
+			})
+		) : _react2.default.createElement(
+			'div',
+			null,
+			'Error'
+		)
+	);
+}
+
+},{"react":320,"react-bootstrap":262,"react-router-dom":303}],344:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Recipes = require('./Recipes.js');
+
+var _Recipes2 = _interopRequireDefault(_Recipes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Recipes2.default;
+
+},{"./Recipes.js":342}],345:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = SampleComponent;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function SampleComponent(props) {
+	return _react2.default.createElement(
+		'div',
+		null,
+		_react2.default.createElement(
+			'p',
+			null,
+			props.msg
+		)
+	);
+}
+
+},{"react":320}],346:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SampleComponent = require('./SampleComponent.js');
+
+var _SampleComponent2 = _interopRequireDefault(_SampleComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _SampleComponent2.default;
+
+},{"./SampleComponent.js":345}],347:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.ROUTES = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _SampleComponent = require('./components/SampleComponent');
+
+var _SampleComponent2 = _interopRequireDefault(_SampleComponent);
+
+var _Recipe = require('./components/Recipe');
+
+var _Recipe2 = _interopRequireDefault(_Recipe);
+
+var _Recipes = require('./components/Recipes');
+
+var _Recipes2 = _interopRequireDefault(_Recipes);
+
+var _NewRecipe = require('./components/NewRecipe');
+
+var _NewRecipe2 = _interopRequireDefault(_NewRecipe);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ROUTES = exports.ROUTES = [{
+	'title': 'Home',
+	'href': '/home',
+	'component': function component(props) {
+		return React.createElement(_SampleComponent2.default, _extends({
+			msg: 'hello world, this is a placeholder for a home page'
+		}, props));
+	}
+}, {
+	'title': 'Recipe',
+	'href': '/recipe/:recipeID',
+	'display': false,
+	'component': function component(props) {
+		return React.createElement(_Recipe2.default, props);
+	}
+}, {
+	'title': 'Recipes',
+	'href': '/recipes',
+	'component': function component(props) {
+		return React.createElement(_Recipes2.default, props);
+	}
+}, {
+	'title': 'New Recipe',
+	'href': '/new-recipe',
+	'component': function component(props) {
+		return React.createElement(_NewRecipe2.default, props);
+	}
+}];
+
+},{"./components/NewRecipe":336,"./components/Recipe":341,"./components/Recipes":344,"./components/SampleComponent":346}]},{},[328]);
