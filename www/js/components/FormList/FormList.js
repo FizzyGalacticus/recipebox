@@ -1,5 +1,7 @@
 import { Component} from 'react';
+import ReactDOM from 'react-dom';
 import {Grid, Row, Col, ListGroup, ListGroupItem, FormControl, Button} from 'react-bootstrap';
+import DragableList from '../DragableList';
 
 export default class FormList extends Component {
 	constructor(props) {
@@ -34,7 +36,7 @@ export default class FormList extends Component {
 			enterItemValue: '',
 		});
 
-		this.props.onChange([this.state.listItems]);
+		// this.props.onChange([this.state.listItems]);
 	}
 
 	render() {
@@ -43,9 +45,8 @@ export default class FormList extends Component {
 				<Row>
 					<Col xs={12} sm={12} md={12} lg={12}>
 						<ListGroup>
-							{this.state.listItems.map((item, index) => {
-								return <ListGroupItem key={index}>{index + 1}. {item}</ListGroupItem>;
-							})}
+							<DragableList listItems={this.state.listItems} />
+							
 							<ListGroupItem>
 								<Row>
 									<Col xs={6} sm={6} md={6} lg={6}>
