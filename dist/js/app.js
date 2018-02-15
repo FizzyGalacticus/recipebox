@@ -45165,7 +45165,7 @@ if ("production" !== 'production') {
 module.exports = warning;
 
 },{}],327:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -45211,8 +45211,6 @@ var _reactRouterDom = require('react-router-dom');
 
 var _SampleComponent = require('./components/SampleComponent');
 
-var _SampleComponent2 = _interopRequireDefault(_SampleComponent);
-
 var _NoMatch = require('./components/NoMatch');
 
 var _NoMatch2 = _interopRequireDefault(_NoMatch);
@@ -45223,15 +45221,9 @@ var _Navbar2 = _interopRequireDefault(_Navbar);
 
 var _Recipe = require('./components/Recipe');
 
-var _Recipe2 = _interopRequireDefault(_Recipe);
-
 var _Recipes = require('./components/Recipes');
 
-var _Recipes2 = _interopRequireDefault(_Recipes);
-
 var _NewRecipe = require('./components/NewRecipe');
-
-var _NewRecipe2 = _interopRequireDefault(_NewRecipe);
 
 var _routes = require('./routes.js');
 
@@ -45297,6 +45289,7 @@ var Layout = function (_Component) {
 							null,
 							_routes.ROUTES.map(function (link, i) {
 								return _react2.default.createElement(_reactRouterDom.Route, {
+									key: i,
 									path: link.href,
 									component: link.component });
 							}),
@@ -45817,7 +45810,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _NewRecipe2.default;
 
 },{"./NewRecipe.js":334}],337:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true

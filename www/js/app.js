@@ -53,6 +53,7 @@ class Layout extends Component {
 						{ROUTES.map( (link,i) => {
 							return (
 								<Route 
+									key={i}
 									path={link.href} 
 									component={link.component} />
 							);
