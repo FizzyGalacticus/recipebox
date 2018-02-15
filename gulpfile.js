@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const plumber = require('gulp-plumber');
 const browserify = require('browserify');
+const commonShake = require('common-shakeify')
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const sass = require('gulp-sass');
@@ -100,6 +101,7 @@ gulp.task('bump-patch', () => {
 
 gulp.task('compile-scripts', () => {
 	return browserify('www/js/app.js')
+	.plugin(commonShake)
 	.transform('babelify', {
 		presets: ['react', 'env'],
 	})
