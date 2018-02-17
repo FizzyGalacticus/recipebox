@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const plumber = require('gulp-plumber');
+const eslint = require('gulp-eslint');
 const browserify = require('browserify');
 const commonShake = require('common-shakeify')
 const resolve = require('rollup-plugin-node-resolve');
@@ -99,7 +100,13 @@ gulp.task('bump-patch', () => {
 	bumpVersion(2);
 });
 
-gulp.task('compile-scripts', () => {
+gulp.task('lint-scripts', () => {
+	return gulp.src(['www/js/**/*.js'])
+	.pipe(eslint('./.eslintrc'))
+	.pipe(eslint.format());
+});
+
+gulp.task('compile-scripts', ['lint-scripts'], () => {
 	return browserify('www/js/app.js')
 	.plugin(commonShake)
 	.transform('babelify', {
