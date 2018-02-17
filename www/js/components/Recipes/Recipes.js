@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Recipes from '../components/Recipes';
-import { socket } from '../SocketIO';
+import RecipesStateless from './RecipesStateless';
+import { socket } from '../../SocketIO';
 
 export default class RecipesContainer extends Component {
 	constructor(props) {
@@ -41,7 +41,7 @@ export default class RecipesContainer extends Component {
 
 	render() {
 		return (
-			<Recipes
+			<RecipesStateless
 				recipes={this.state.recipes}
 				loadRecipe={this.loadRecipe}
 			/>

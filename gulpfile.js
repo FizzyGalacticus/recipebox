@@ -1,18 +1,46 @@
-let gulp = require('gulp');
-let plumber = require('gulp-plumber');
-let browserify = require('browserify');
-let sass = require('gulp-sass');
-let autoprefixer = require('gulp-autoprefixer');
-let source = require('vinyl-source-stream');
-let concat = require('gulp-concat');
-let uglify = require('gulp-uglify');
-let rename = require('gulp-rename');
-let htmlmin = require('gulp-htmlmin');
-let imagemin = require('gulp-imagemin');
-let cssmin = require('gulp-cssmin');
-let sequence = require('gulp-sequence');
-let fs = require('fs');
-let livereload = require('gulp-livereload');
+const gulp = require('gulp');
+const plumber = require('gulp-plumber');
+const browserify = require('browserify');
+const commonShake = require('common-shakeify')
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
+const source = require('vinyl-source-stream');
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
+const rename = require('gulp-rename');
+const htmlmin = require('gulp-htmlmin');
+const imagemin = require('gulp-imagemin');
+const cssmin = require('gulp-cssmin');
+const sequence = require('gulp-sequence');
+const fs = require('fs');
+const path = require('path');
+const livereload = require('gulp-livereload');
+
+const scssDirectories = [
+	`www${path.sep}scss`,
+	`www${path.sep}css`,
+	`www${path.sep}js${path.sep}components`,
+];
+
+const scssExtensions = [
+	'scss', 'css',
+];
+
+let scssSourceStrings = [];
+
+let getScssSourceStrings = () => {
+	if(scssSourceStrings.length === 0) {
+		for(const dir in scssDirectories) {
+			for(const extension in scssExtensions) {
+				scssSourceStrings.push(`${dir + path.sep}**/*.${extension}`);
+			}
+		}
+	}
+
+	return scssSourceStrings;
+};
 
 let getSymverFromPackage = () => {
 	let pkg = require('./package.json');
@@ -73,8 +101,30 @@ gulp.task('bump-patch', () => {
 
 gulp.task('compile-scripts', () => {
 	return browserify('www/js/app.js')
+	.plugin(commonShake)
 	.transform('babelify', {
 		presets: ['react', 'env'],
+	})
+	.transform('rollupify', {
+		config: {
+			format: 'iife',
+			plugins: [
+				resolve({
+					module: true,
+					jsnext: true,
+					main: true,
+					browser: true,
+					extensions: [ '.js', '.json' ],
+					preferBuiltins: true,
+					jail: '/my/jail/path',
+					modulesOnly: false,
+					customResolveOptions: {
+						moduleDirectory: `${__dirname}/node_modules`
+					}
+				}),
+				commonjs(),
+			],
+		},
 	})
 	.bundle()
 	.on('error', function(err) {
@@ -82,15 +132,15 @@ gulp.task('compile-scripts', () => {
 		this.emit('end');
 	})
 	.pipe(source('app.js'))
-    .pipe(gulp.dest('dist/js'));
+	.pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('min-scripts', ['compile-scripts'], () => {
 	return gulp.src(['dist/js/app.js'])
 	.pipe(plumber())
 	.pipe(uglify())
-	.pipe(rename({suffix:'.min'}))
-    .pipe(gulp.dest('dist/js'))
+	.pipe(rename({suffix: '.min'}))
+		.pipe(gulp.dest('dist/js'))
 	.pipe(livereload());
 });
 
@@ -106,14 +156,14 @@ gulp.task('min-html', () => {
 		removeComments: true,
 		removeEmptyAttributes: true,
 		removeOptionalTags: true,
-		removeRedundantAttributes: true
+		removeRedundantAttributes: true,
 	}))
 	.pipe(gulp.dest('dist'))
 	.pipe(livereload());
 });
 
 gulp.task('sass', () => {
-	return gulp.src(['www/scss/**/*.scss', 'www/scss/**/*.css', 'www/css/**/*.css'])
+	return gulp.src(getScssSourceStrings())
 	.pipe(plumber())
 	.pipe(sass.sync())
 	.pipe(autoprefixer({
@@ -127,13 +177,13 @@ gulp.task('sass', () => {
 });
 
 gulp.task('fonts', () => {
-	var fontDir = 'www/fonts/';
+	const fontDir = 'www/fonts/';
 	return gulp.src([fontDir + '*.ttf',
-			  fontDir + '*.oft', 
-			  fontDir + '*.woff', 
-			  fontDir + '*.woff2', 
-			  fontDir + '*.svg', 
-			  fontDir + '*.eot'])
+		fontDir + '*.oft',
+		fontDir + '*.woff',
+		fontDir + '*.woff2',
+		fontDir + '*.svg',
+		fontDir + '*.eot'])
 	.pipe(plumber())
 	.pipe(gulp.dest('dist/fonts'))
 	.pipe(livereload());
@@ -163,7 +213,7 @@ gulp.task('watch-html', () => {
 });
 
 gulp.task('watch-sass', () => {
-	gulp.watch(['www/scss/**/*.scss', 'www/scss/**/*.css', 'www/css/**/*.css'], ['sass']);
+	gulp.watch(getScssSourceStrings(), ['sass']);
 });
 
 gulp.task('watch-fonts', () => {
@@ -177,8 +227,12 @@ gulp.task('watch-img', () => {
 gulp.task('livereload', () => {
 	livereload.listen({
 		start: true,
-		reloadPage: './dist/index.html',
+		reloadPage: `${__dirname}/dist/index.html`,
 	});
 });
 
-gulp.task('default', sequence('all', ['watch-scripts', 'watch-html', 'watch-sass', 'watch-fonts', 'watch-img', 'livereload']));
+gulp.task('default', sequence('all', [
+	'watch-scripts', 'watch-html',
+	'watch-sass', 'watch-fonts',
+	'watch-img', 'livereload',
+]));

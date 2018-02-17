@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
+import FormList from '../FormList';
 
-export default function NewRecipe(props) {
+export default function NewRecipeStateless(props) {
 	return (
 		<div>
 			<form id="newRecipeForm" action="post" onSubmit={props.submit}>
-				{/*<FormList updateArray={this.updateArray} g/>*/}
+				<FormList updateArray={() => this.updateArray([])} />
 				<label value="Name">
 					<input type="text" name="name"/>
 				</label>
