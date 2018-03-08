@@ -4,12 +4,18 @@ import { Navbar as BSNavbar, Nav, NavItem } from 'react-bootstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faUtensils } from '@fortawesome/fontawesome-free-solid';
 
+const styles = {
+	link: {
+		textDecoration: 'none'
+	}
+}
+
 export default function NavbarStateless(props) {
 	return (
 		<BSNavbar className='fixed-top' inverse collapseOnSelect>
 			<BSNavbar.Header>
 				<BSNavbar.Brand>
-					<a className='nav-link' href="/#/home">
+					<a className='nav-link' href="/home">
 						<FontAwesomeIcon className="nav-link" icon={faUtensils} />
 						RecipeBox
 					</a>
@@ -27,11 +33,11 @@ export default function NavbarStateless(props) {
 							key={lc}
 							className={props.active === lc ? 'active' : ''}
 							id={lc}
-							onClick={() => {props.setActive(lc,link.href)}} 
-							href={`#${link.href}`} >
+							onClick={() => {props.setActive(lc)}} 
+							href={`${link.href}`} >
 							<Link 
 								to={link.href} 
-								style={{textDecoration:'none'}}
+								style={styles.link}
 								className='nav-link' >
 								{link.title}
 							</Link>

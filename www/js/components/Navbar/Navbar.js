@@ -30,15 +30,12 @@ export default class NavbarContainer extends Component {
 		console.log(error);
 	}
 
-	setActive(lc,url) {
+	setActive(lc) {
 		console.log('Navbar: setActive');
 
 		this.setState({
 			active: lc
-		}, () => {
-			window.location.hash = `#${url}`;
 		});
-
 	}
 
 	render() {

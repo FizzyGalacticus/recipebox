@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import SampleComponent from './components/SampleComponent';
 import NoMatch from './components/NoMatch';
@@ -44,7 +44,7 @@ import { ROUTES } from './routes.js'
 class Layout extends Component {
 	render() {
 		return (
-			<HashRouter>
+			<BrowserRouter>
 				<div>
 					<Navbar links={ROUTES} />
 
@@ -64,7 +64,7 @@ class Layout extends Component {
 					</Switch>
 					</div>
 				</div>
-			</HashRouter>
+			</BrowserRouter>
 		);
 	}
 }
