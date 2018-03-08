@@ -4984,7 +4984,14 @@ module.exports = function (it) {
     : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
 };
 
-},{"./_cof":35,"./_wks":92}],92:[function(require,module,exports){
+},{"./_cof":35,"./_wks":92}],35:[function(require,module,exports){
+var toString = {}.toString;
+
+module.exports = function (it) {
+  return toString.call(it).slice(8, -1);
+};
+
+},{}],92:[function(require,module,exports){
 var store = require('./_shared')('wks');
 var uid = require('./_uid');
 var Symbol = require('./_global').Symbol;
@@ -4997,14 +5004,7 @@ var $exports = module.exports = function (name) {
 
 $exports.store = store;
 
-},{"./_global":46,"./_shared":81,"./_uid":89}],35:[function(require,module,exports){
-var toString = {}.toString;
-
-module.exports = function (it) {
-  return toString.call(it).slice(8, -1);
-};
-
-},{}],37:[function(require,module,exports){
+},{"./_global":46,"./_shared":81,"./_uid":89}],37:[function(require,module,exports){
 'use strict';
 var $defineProperty = require('./_object-dp');
 var createDesc = require('./_property-desc');
@@ -8769,7 +8769,122 @@ var createBrowserHistory = function createBrowserHistory() {
 };
 
 exports.default = createBrowserHistory;
-},{"./DOMUtils":158,"./LocationUtils":159,"./PathUtils":160,"./createTransitionManager":164,"invariant":166,"warning":336}],164:[function(require,module,exports){
+},{"./DOMUtils":158,"./LocationUtils":159,"./PathUtils":160,"./createTransitionManager":164,"invariant":166,"warning":336}],336:[function(require,module,exports){
+/**
+ * Copyright 2014-2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+'use strict';
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
+
+var warning = function() {};
+
+if ("production" !== 'production') {
+  warning = function(condition, format, args) {
+    var len = arguments.length;
+    args = new Array(len > 2 ? len - 2 : 0);
+    for (var key = 2; key < len; key++) {
+      args[key - 2] = arguments[key];
+    }
+    if (format === undefined) {
+      throw new Error(
+        '`warning(condition, format, ...args)` requires a warning ' +
+        'message argument'
+      );
+    }
+
+    if (format.length < 10 || (/^[s\W]*$/).test(format)) {
+      throw new Error(
+        'The warning format should be able to uniquely identify this ' +
+        'warning. Please, use a more descriptive format than: ' + format
+      );
+    }
+
+    if (!condition) {
+      var argIndex = 0;
+      var message = 'Warning: ' +
+        format.replace(/%s/g, function() {
+          return args[argIndex++];
+        });
+      if (typeof console !== 'undefined') {
+        console.error(message);
+      }
+      try {
+        // This error was thrown as a convenience so that you can use this stack
+        // to find the callsite that caused this warning to fire.
+        throw new Error(message);
+      } catch(x) {}
+    }
+  };
+}
+
+module.exports = warning;
+
+},{}],166:[function(require,module,exports){
+/**
+ * Copyright 2013-2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+'use strict';
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var invariant = function(condition, format, a, b, c, d, e, f) {
+  if ("production" !== 'production') {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  }
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error(
+        'Minified exception occurred; use the non-minified dev environment ' +
+        'for the full error message and additional helpful warnings.'
+      );
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(
+        format.replace(/%s/g, function() { return args[argIndex++]; })
+      );
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+};
+
+module.exports = invariant;
+
+},{}],164:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -8855,122 +8970,7 @@ var createTransitionManager = function createTransitionManager() {
 };
 
 exports.default = createTransitionManager;
-},{"warning":336}],166:[function(require,module,exports){
-/**
- * Copyright 2013-2015, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-
-'use strict';
-
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-var invariant = function(condition, format, a, b, c, d, e, f) {
-  if ("production" !== 'production') {
-    if (format === undefined) {
-      throw new Error('invariant requires an error message argument');
-    }
-  }
-
-  if (!condition) {
-    var error;
-    if (format === undefined) {
-      error = new Error(
-        'Minified exception occurred; use the non-minified dev environment ' +
-        'for the full error message and additional helpful warnings.'
-      );
-    } else {
-      var args = [a, b, c, d, e, f];
-      var argIndex = 0;
-      error = new Error(
-        format.replace(/%s/g, function() { return args[argIndex++]; })
-      );
-      error.name = 'Invariant Violation';
-    }
-
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error;
-  }
-};
-
-module.exports = invariant;
-
-},{}],336:[function(require,module,exports){
-/**
- * Copyright 2014-2015, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-
-'use strict';
-
-/**
- * Similar to invariant but only logs a warning if the condition is not met.
- * This can be used to log issues in development environments in critical
- * paths. Removing the logging code for production environments will keep the
- * same logic and follow the same code paths.
- */
-
-var warning = function() {};
-
-if ("production" !== 'production') {
-  warning = function(condition, format, args) {
-    var len = arguments.length;
-    args = new Array(len > 2 ? len - 2 : 0);
-    for (var key = 2; key < len; key++) {
-      args[key - 2] = arguments[key];
-    }
-    if (format === undefined) {
-      throw new Error(
-        '`warning(condition, format, ...args)` requires a warning ' +
-        'message argument'
-      );
-    }
-
-    if (format.length < 10 || (/^[s\W]*$/).test(format)) {
-      throw new Error(
-        'The warning format should be able to uniquely identify this ' +
-        'warning. Please, use a more descriptive format than: ' + format
-      );
-    }
-
-    if (!condition) {
-      var argIndex = 0;
-      var message = 'Warning: ' +
-        format.replace(/%s/g, function() {
-          return args[argIndex++];
-        });
-      if (typeof console !== 'undefined') {
-        console.error(message);
-      }
-      try {
-        // This error was thrown as a convenience so that you can use this stack
-        // to find the callsite that caused this warning to fire.
-        throw new Error(message);
-      } catch(x) {}
-    }
-  };
-}
-
-module.exports = warning;
-
-},{}],162:[function(require,module,exports){
+},{"warning":336}],162:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -11055,7 +11055,43 @@ CloseButton.defaultProps = defaultProps;
 
 exports.default = CloseButton;
 module.exports = exports['default'];
-},{"babel-runtime/helpers/classCallCheck":13,"babel-runtime/helpers/inherits":15,"babel-runtime/helpers/possibleConstructorReturn":17,"prop-types":179,"react":329}],275:[function(require,module,exports){
+},{"babel-runtime/helpers/classCallCheck":13,"babel-runtime/helpers/inherits":15,"babel-runtime/helpers/possibleConstructorReturn":17,"prop-types":179,"react":329}],272:[function(require,module,exports){
+'use strict';
+
+/* common-shake removed: exports.__esModule = */ void true;
+var Size = exports.Size = {
+  LARGE: 'large',
+  SMALL: 'small',
+  XSMALL: 'xsmall'
+};
+
+var SIZE_MAP = exports.SIZE_MAP = {
+  large: 'lg',
+  medium: 'md',
+  small: 'sm',
+  xsmall: 'xs',
+  lg: 'lg',
+  md: 'md',
+  sm: 'sm',
+  xs: 'xs'
+};
+
+var DEVICE_SIZES = exports.DEVICE_SIZES = ['lg', 'md', 'sm', 'xs'];
+
+var State = exports.State = {
+  SUCCESS: 'success',
+  WARNING: 'warning',
+  DANGER: 'danger',
+  INFO: 'info'
+};
+
+var Style = exports.Style = {
+  DEFAULT: 'default',
+  PRIMARY: 'primary',
+  LINK: 'link',
+  INVERSE: 'inverse'
+};
+},{}],275:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -11274,43 +11310,7 @@ function addStyle(Component) {
 
 var _curry = exports._curry = curry;
 }).call(this,require('_process'))
-},{"./StyleConfig":272,"_process":169,"babel-runtime/core-js/object/entries":8,"babel-runtime/helpers/extends":14,"invariant":166,"prop-types":179}],272:[function(require,module,exports){
-'use strict';
-
-/* common-shake removed: exports.__esModule = */ void true;
-var Size = exports.Size = {
-  LARGE: 'large',
-  SMALL: 'small',
-  XSMALL: 'xsmall'
-};
-
-var SIZE_MAP = exports.SIZE_MAP = {
-  large: 'lg',
-  medium: 'md',
-  small: 'sm',
-  xsmall: 'xs',
-  lg: 'lg',
-  md: 'md',
-  sm: 'sm',
-  xs: 'xs'
-};
-
-var DEVICE_SIZES = exports.DEVICE_SIZES = ['lg', 'md', 'sm', 'xs'];
-
-var State = exports.State = {
-  SUCCESS: 'success',
-  WARNING: 'warning',
-  DANGER: 'danger',
-  INFO: 'info'
-};
-
-var Style = exports.Style = {
-  DEFAULT: 'default',
-  PRIMARY: 'primary',
-  LINK: 'link',
-  INVERSE: 'inverse'
-};
-},{}],183:[function(require,module,exports){
+},{"./StyleConfig":272,"_process":169,"babel-runtime/core-js/object/entries":8,"babel-runtime/helpers/extends":14,"invariant":166,"prop-types":179}],183:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -20792,81 +20792,7 @@ NavbarCollapse.contextTypes = contextTypes;
 
 exports.default = NavbarCollapse;
 module.exports = exports['default'];
-},{"./Collapse":196,"./utils/bootstrapUtils":275,"babel-runtime/helpers/classCallCheck":13,"babel-runtime/helpers/extends":14,"babel-runtime/helpers/inherits":15,"babel-runtime/helpers/objectWithoutProperties":16,"babel-runtime/helpers/possibleConstructorReturn":17,"prop-types":179,"react":329}],239:[function(require,module,exports){
-'use strict';
-
-exports.__esModule = true;
-
-var _extends2 = require('babel-runtime/helpers/extends');
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _objectWithoutProperties2 = require('babel-runtime/helpers/objectWithoutProperties');
-
-var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _classnames = require('classnames');
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = require('prop-types');
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _bootstrapUtils = require('./utils/bootstrapUtils');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var contextTypes = {
-  $bs_navbar: _propTypes2.default.shape({
-    bsClass: _propTypes2.default.string
-  })
-};
-
-var NavbarHeader = function (_React$Component) {
-  (0, _inherits3.default)(NavbarHeader, _React$Component);
-
-  function NavbarHeader() {
-    (0, _classCallCheck3.default)(this, NavbarHeader);
-    return (0, _possibleConstructorReturn3.default)(this, _React$Component.apply(this, arguments));
-  }
-
-  NavbarHeader.prototype.render = function render() {
-    var _props = this.props,
-        className = _props.className,
-        props = (0, _objectWithoutProperties3.default)(_props, ['className']);
-
-    var navbarProps = this.context.$bs_navbar || { bsClass: 'navbar' };
-
-    var bsClassName = (0, _bootstrapUtils.prefix)(navbarProps, 'header');
-
-    return _react2.default.createElement('div', (0, _extends3.default)({}, props, { className: (0, _classnames2.default)(className, bsClassName) }));
-  };
-
-  return NavbarHeader;
-}(_react2.default.Component);
-
-NavbarHeader.contextTypes = contextTypes;
-
-exports.default = NavbarHeader;
-module.exports = exports['default'];
-},{"./utils/bootstrapUtils":275,"babel-runtime/helpers/classCallCheck":13,"babel-runtime/helpers/extends":14,"babel-runtime/helpers/inherits":15,"babel-runtime/helpers/objectWithoutProperties":16,"babel-runtime/helpers/possibleConstructorReturn":17,"classnames":19,"prop-types":179,"react":329}],240:[function(require,module,exports){
+},{"./Collapse":196,"./utils/bootstrapUtils":275,"babel-runtime/helpers/classCallCheck":13,"babel-runtime/helpers/extends":14,"babel-runtime/helpers/inherits":15,"babel-runtime/helpers/objectWithoutProperties":16,"babel-runtime/helpers/possibleConstructorReturn":17,"prop-types":179,"react":329}],240:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -20981,7 +20907,81 @@ NavbarToggle.contextTypes = contextTypes;
 
 exports.default = NavbarToggle;
 module.exports = exports['default'];
-},{"./utils/bootstrapUtils":275,"./utils/createChainedFunction":277,"babel-runtime/helpers/classCallCheck":13,"babel-runtime/helpers/extends":14,"babel-runtime/helpers/inherits":15,"babel-runtime/helpers/objectWithoutProperties":16,"babel-runtime/helpers/possibleConstructorReturn":17,"classnames":19,"prop-types":179,"react":329}],241:[function(require,module,exports){
+},{"./utils/bootstrapUtils":275,"./utils/createChainedFunction":277,"babel-runtime/helpers/classCallCheck":13,"babel-runtime/helpers/extends":14,"babel-runtime/helpers/inherits":15,"babel-runtime/helpers/objectWithoutProperties":16,"babel-runtime/helpers/possibleConstructorReturn":17,"classnames":19,"prop-types":179,"react":329}],239:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _extends2 = require('babel-runtime/helpers/extends');
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = require('babel-runtime/helpers/objectWithoutProperties');
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _bootstrapUtils = require('./utils/bootstrapUtils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var contextTypes = {
+  $bs_navbar: _propTypes2.default.shape({
+    bsClass: _propTypes2.default.string
+  })
+};
+
+var NavbarHeader = function (_React$Component) {
+  (0, _inherits3.default)(NavbarHeader, _React$Component);
+
+  function NavbarHeader() {
+    (0, _classCallCheck3.default)(this, NavbarHeader);
+    return (0, _possibleConstructorReturn3.default)(this, _React$Component.apply(this, arguments));
+  }
+
+  NavbarHeader.prototype.render = function render() {
+    var _props = this.props,
+        className = _props.className,
+        props = (0, _objectWithoutProperties3.default)(_props, ['className']);
+
+    var navbarProps = this.context.$bs_navbar || { bsClass: 'navbar' };
+
+    var bsClassName = (0, _bootstrapUtils.prefix)(navbarProps, 'header');
+
+    return _react2.default.createElement('div', (0, _extends3.default)({}, props, { className: (0, _classnames2.default)(className, bsClassName) }));
+  };
+
+  return NavbarHeader;
+}(_react2.default.Component);
+
+NavbarHeader.contextTypes = contextTypes;
+
+exports.default = NavbarHeader;
+module.exports = exports['default'];
+},{"./utils/bootstrapUtils":275,"babel-runtime/helpers/classCallCheck":13,"babel-runtime/helpers/extends":14,"babel-runtime/helpers/inherits":15,"babel-runtime/helpers/objectWithoutProperties":16,"babel-runtime/helpers/possibleConstructorReturn":17,"classnames":19,"prop-types":179,"react":329}],241:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -43668,7 +43668,7 @@ exports.default = Switch;
 'use strict';
 
 /* common-shake removed: exports.__esModule = */ void true;
-/* common-shake removed: exports.withRouter = */ void 0, /* common-shake removed: exports.matchPath = */ void 0, exports.Switch = /* common-shake removed: exports.StaticRouter = */ void 0, /* common-shake removed: exports.Router = */ void 0, exports.Route = exports.Redirect = /* common-shake removed: exports.Prompt = */ void 0, /* common-shake removed: exports.NavLink = */ void 0, /* common-shake removed: exports.MemoryRouter = */ void 0, exports.Link = exports.HashRouter = /* common-shake removed: exports.BrowserRouter = */ undefined;
+/* common-shake removed: exports.withRouter = */ void 0, /* common-shake removed: exports.matchPath = */ void 0, exports.Switch = /* common-shake removed: exports.StaticRouter = */ void 0, /* common-shake removed: exports.Router = */ void 0, exports.Route = exports.Redirect = /* common-shake removed: exports.Prompt = */ void 0, /* common-shake removed: exports.NavLink = */ void 0, /* common-shake removed: exports.MemoryRouter = */ void 0, exports.Link = /* common-shake removed: exports.HashRouter = */ void 0, exports.BrowserRouter = undefined;
 
 var _BrowserRouter2 = require('./BrowserRouter');
 
@@ -43724,8 +43724,8 @@ var _withRouter3 = _interopRequireDefault(_withRouter2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* common-shake removed: exports.BrowserRouter = */ void _BrowserRouter3.default;
-exports.HashRouter = _HashRouter3.default;
+exports.BrowserRouter = _BrowserRouter3.default;
+/* common-shake removed: exports.HashRouter = */ void _HashRouter3.default;
 exports.Link = _Link3.default;
 /* common-shake removed: exports.MemoryRouter = */ void _MemoryRouter3.default;
 /* common-shake removed: exports.NavLink = */ void _NavLink3.default;
@@ -46197,7 +46197,7 @@ var Layout = function (_Component) {
 		key: 'render',
 		value: function render() {
 			return _react2.default.createElement(
-				_reactRouterDom.HashRouter,
+				_reactRouterDom.BrowserRouter,
 				null,
 				_react2.default.createElement(
 					'div',
@@ -46288,22 +46288,7 @@ var ROUTES = exports.ROUTES = [{
 	}
 }];
 
-},{"./components/NewRecipe":348,"./components/Recipe":353,"./components/Recipes":356,"./components/SampleComponent":358}],358:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _SampleComponent = require('./SampleComponent.js');
-
-var _SampleComponent2 = _interopRequireDefault(_SampleComponent);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _SampleComponent2.default;
-
-},{"./SampleComponent.js":357}],350:[function(require,module,exports){
+},{"./components/NewRecipe":348,"./components/Recipe":353,"./components/Recipes":356,"./components/SampleComponent":358}],350:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46318,7 +46303,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = _NoMatch2.default;
 
-},{"./NoMatch.js":349}],353:[function(require,module,exports){
+},{"./NoMatch.js":349}],358:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SampleComponent = require('./SampleComponent.js');
+
+var _SampleComponent2 = _interopRequireDefault(_SampleComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _SampleComponent2.default;
+
+},{"./SampleComponent.js":357}],353:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46686,13 +46686,11 @@ var NavbarContainer = function (_Component) {
 		}
 	}, {
 		key: 'setActive',
-		value: function setActive(lc, url) {
+		value: function setActive(lc) {
 			console.log('Navbar: setActive');
 
 			this.setState({
 				active: lc
-			}, function () {
-				window.location.hash = '#' + url;
 			});
 		}
 	}, {
@@ -46739,6 +46737,12 @@ var _fontawesomeFreeSolid = require('@fortawesome/fontawesome-free-solid');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var styles = {
+	link: {
+		textDecoration: 'none'
+	}
+};
+
 function NavbarStateless(props) {
 	return _react2.default.createElement(
 		_reactBootstrap.Navbar,
@@ -46751,7 +46755,7 @@ function NavbarStateless(props) {
 				null,
 				_react2.default.createElement(
 					'a',
-					{ className: 'nav-link', href: '/#/home' },
+					{ className: 'nav-link', href: '/home' },
 					_react2.default.createElement(_reactFontawesome2.default, { className: 'nav-link', icon: _fontawesomeFreeSolid.faUtensils }),
 					'RecipeBox'
 				)
@@ -46774,14 +46778,14 @@ function NavbarStateless(props) {
 								className: props.active === lc ? 'active' : '',
 								id: lc,
 								onClick: function onClick() {
-									props.setActive(lc, link.href);
+									props.setActive(lc);
 								},
-								href: '#' + link.href },
+								href: '' + link.href },
 							_react2.default.createElement(
 								_reactRouterDom.Link,
 								{
 									to: link.href,
-									style: { textDecoration: 'none' },
+									style: styles.link,
 									className: 'nav-link' },
 								link.title
 							)
