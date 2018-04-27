@@ -22,6 +22,8 @@ const RecipeServer = require('./server/RecipeServer');
 const open = require('open');
 const livereload = require('gulp-livereload');
 
+const server = new RecipeServer({port: 3000});
+
 const prodFileReplacements = [
 	{
 		path: 'www/index.html',
@@ -348,7 +350,6 @@ gulp.task('fonts', () => {
 		.pipe(livereload());
 });
 
-// not being done when just running gulp
 gulp.task('min-image', () => {
 	return gulp.src('www/img/**/*')
 		.pipe(plumber())
@@ -358,8 +359,6 @@ gulp.task('min-image', () => {
 });
 
 gulp.task('serve', () => {
-	const server = new RecipeServer({port: 3000});
-
 	server.start((url) => {
 		open(url);
 	});
@@ -370,12 +369,21 @@ gulp.task('serve', () => {
 	});
 });
 
+gulp.task('restart-server', () => {
+	server.stop();
+	server.start();
+});
+
 gulp.task('all-prod', (callback) => {
 	sequence(['min-scripts', 'min-html', 'sass', 'fonts', 'min-image'])(callback);
 });
 
 gulp.task('all', (callback) => {
 	sequence(['compile-scripts', 'min-html', 'sass', 'fonts', 'min-image'])(callback);
+});
+
+gulp.task('watch-server', () => {
+	gulp.watch('server/**/*', ['restart-server']);
 });
 
 gulp.task('watch-scripts', () => {
@@ -418,5 +426,6 @@ gulp.task('default', sequence('all', [
 	'watch-fonts',
 	'watch-img',
 	'serve',
+	'watch-server',
 	'livereload',
 ]));
