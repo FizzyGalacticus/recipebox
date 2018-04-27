@@ -1,13 +1,13 @@
-let mongoose = require('mongoose');
-let fs = require('fs');
-let grid = require('gridfs-stream');
+const mongoose = require('mongoose');
+const fs = require('fs');
+const grid = require('gridfs-stream');
 
 /* MODELS */
-let RecipeModel = require('./models/recipemodel.js');
-let MeasurementModel = require('./models/measurementmodel.js');
-let InstructionModel = require('./models/instructionmodel.js');
-let IngredientModel = require('./models/ingredientmodel.js');
-let UserModel = require('./models/usermodel.js');
+const RecipeModel = require('./models/recipemodel.js');
+const MeasurementModel = require('./models/measurementmodel.js');
+const InstructionModel = require('./models/instructionmodel.js');
+const IngredientModel = require('./models/ingredientmodel.js');
+const UserModel = require('./models/usermodel.js');
 
 mongoose.Promise = Promise;
 grid.mongo = mongoose.mongo;
@@ -32,11 +32,11 @@ class Database {
 
 	saveFile(file, metadata) {
 		return new Promise((resolve, reject) => {
-			let filename = file.filename;
-			let location = file.location;
-			let root = file.root;
+			const filename = file.filename;
+			const location = file.location;
+			const root = file.root;
 
-			let writeStream = this.gfs.createWriteStream({
+			const writeStream = this.gfs.createWriteStream({
 				filename,
 				metadata,
 				root,
@@ -62,7 +62,7 @@ class Database {
 				else if(!found)
 					reject(`File not found.`);
 				else {
-					let stream = this.gfs.createReadStream(file);
+					const stream = this.gfs.createReadStream(file);
 
 					resolve(stream);
 				}
@@ -72,7 +72,7 @@ class Database {
 
 	save(model, data) {
 		return new Promise((resolve, reject) => {
-			let saveFunc = (err, response) => {
+			const saveFunc = (err, response) => {
 				if(err)
 					reject(`Cannot save model: ${err}`);
 				else
@@ -82,7 +82,7 @@ class Database {
 			if(Array.isArray(data))
 				model.insertMany(data, saveFunc);
 			else {
-				let tempModel = new model(data);
+				const tempModel = new model(data);
 				tempModel.save(saveFunc);
 			}
 		});
@@ -104,7 +104,7 @@ class Database {
 	saveRecipe(data) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let response = await this.save(RecipeModel, data);
+				const response = await this.save(RecipeModel, data);
 				resolve(response);
 			}
 			catch(err) {
@@ -116,7 +116,7 @@ class Database {
 	getRecipe(opts) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let recipes = await this.get(RecipeModel, opts);
+				const recipes = await this.get(RecipeModel, opts);
 				resolve(recipes);
 			}
 			catch(err) {
@@ -128,7 +128,7 @@ class Database {
 	saveMeasurement(data) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let response = await this.save(MeasurementModel, data);
+				const response = await this.save(MeasurementModel, data);
 				resolve(response);
 			}
 			catch(err) {
@@ -140,7 +140,7 @@ class Database {
 	getMeasurement(opts) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let measurements = await this.get(MeasurementModel, opts);
+				const measurements = await this.get(MeasurementModel, opts);
 				resolve(measurements);
 			}
 			catch(err) {
@@ -152,7 +152,7 @@ class Database {
 	saveIngredient(data) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let response = await this.save(IngredientModel, data);
+				const response = await this.save(IngredientModel, data);
 				resolve(response);
 			}
 			catch(err) {
@@ -164,7 +164,7 @@ class Database {
 	getIngredient(opts) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let ingredients = await this.get(IngredientModel, opts);
+				const ingredients = await this.get(IngredientModel, opts);
 				resolve(ingredients);
 			}
 			catch(err) {
@@ -176,7 +176,7 @@ class Database {
 	saveInstruction(data) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let response = await this.save(InstructionModel, data);
+				const response = await this.save(InstructionModel, data);
 				resolve(response);
 			}
 			catch(err) {
@@ -188,7 +188,7 @@ class Database {
 	getInstruction(opts) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let instructions = await this.get(InstructionModel, opts);
+				const instructions = await this.get(InstructionModel, opts);
 				resolve(instructions);
 			}
 			catch(err) {
@@ -200,7 +200,7 @@ class Database {
 	saveUser(data) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let response = await this.save(UserModel, data);
+				const response = await this.save(UserModel, data);
 				resolve(response);
 			}
 			catch(err) {
@@ -212,7 +212,7 @@ class Database {
 	getUser(opts) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				let users = await this.get(UserModel, opts);
+				const users = await this.get(UserModel, opts);
 				resolve(users);
 			}
 			catch(err) {
