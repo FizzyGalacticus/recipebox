@@ -1,5 +1,6 @@
-let io = require('socket.io');
-let database = require('../database/Database.js').getInstance();
+const io = require('socket.io');
+const database = require('../database/Database.js').getInstance();
+const log = require('fancy-log');
 
 class SocketHandler {
 	constructor(server) {
@@ -12,11 +13,11 @@ class SocketHandler {
 
 	initSignals() {
 		this.socketio.sockets.on('connection', (socket) => {
-			console.log(`Client connected.`);
+			log(`Client connected.`);
 
 			socket.on('getRecipe', async (opts) => {
 				try {
-					let recipes = await this.database.getRecipe(opts);
+					const recipes = await this.database.getRecipe(opts);
 					socket.emit('getRecipe', {success: true, recipes});
 				}
 				catch(err) {
@@ -26,7 +27,7 @@ class SocketHandler {
 
 			socket.on('saveRecipe', async (data) => {
 				try {
-					let response = await this.database.saveRecipe(data);
+					const response = await this.database.saveRecipe(data);
 					socket.emit('saveRecipe', {success: true, response});
 				}
 				catch(err) {
@@ -36,7 +37,7 @@ class SocketHandler {
 
 			socket.on('getIngredient', async (opts) => {
 				try {
-					let ingredients = await this.database.getIngredient(opts);
+					const ingredients = await this.database.getIngredient(opts);
 					socket.emit('getIngredient', {success: true, ingredients});
 				}
 				catch(err) {
@@ -46,7 +47,7 @@ class SocketHandler {
 
 			socket.on('saveIngredient', async (data) => {
 				try {
-					let response = await this.database.saveIngredient(data);
+					const response = await this.database.saveIngredient(data);
 					socket.emit('saveIngredient', {success: true, response});
 				}
 				catch(err) {
@@ -56,7 +57,7 @@ class SocketHandler {
 
 			socket.on('getInstruction', async (opts) => {
 				try {
-					let instructions = await this.database.getInstruction(opts);
+					const instructions = await this.database.getInstruction(opts);
 					socket.emit('getInstruction', {success: true, instructions});
 				}
 				catch(err) {
@@ -66,7 +67,7 @@ class SocketHandler {
 
 			socket.on('saveInstruction', async (data) => {
 				try {
-					let response = await this.database.saveInstruction(data);
+					const response = await this.database.saveInstruction(data);
 					socket.emit('saveInstruction', {success: true, response});
 				}
 				catch(err) {
@@ -76,7 +77,7 @@ class SocketHandler {
 
 			socket.on('getMeasurement', async (opts) => {
 				try {
-					let measurements = await this.database.getMeasurement(opts);
+					const measurements = await this.database.getMeasurement(opts);
 					socket.emit('getMeasurement', {success: true, measurements});
 				}
 				catch(err) {
@@ -86,7 +87,7 @@ class SocketHandler {
 
 			socket.on('saveMeasurement', async (data) => {
 				try {
-					let response = await this.database.saveMeasurement(data);
+					const response = await this.database.saveMeasurement(data);
 					socket.emit('saveMeasurement', {success: true, response});
 				}
 				catch(err) {
@@ -96,7 +97,7 @@ class SocketHandler {
 
 			socket.on('getUser', async (opts) => {
 				try {
-					let users = await this.database.getUser(opts);
+					const users = await this.database.getUser(opts);
 					socket.emit('getUser', {success: true, users});
 				}
 				catch(err) {
@@ -106,7 +107,7 @@ class SocketHandler {
 
 			socket.on('saveUser', async (data) => {
 				try {
-					let response = await this.database.saveUser(data);
+					const response = await this.database.saveUser(data);
 					socket.emit('saveUser', {success: true, response});
 				}
 				catch(err) {
@@ -115,7 +116,7 @@ class SocketHandler {
 			});
 
 			socket.on('disconnect', () => {
-				console.log(`Client disconnected.`);
+				log(`Client disconnected.`);
 			});
 		});
 	}
