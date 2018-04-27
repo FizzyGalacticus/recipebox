@@ -38,14 +38,6 @@
 		'brace-style': [2, 'stroustrup', { allowSingleLine: true }],
 		'max-len': [1, {code: 120}],
 		'new-cap': [1, {properties: false}],
-		'require-jsdoc': ['error', {
-			require: {
-				FunctionDeclaration: true,
-				MethodDefinition: true,
-				ClassDeclaration: true,
-				ArrowFunctionExpression: true
-			},
-		}],
 		'keyword-spacing': [2, {overrides: {
 			if: {after: false},
 			for: {after: false},
