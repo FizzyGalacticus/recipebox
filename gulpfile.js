@@ -18,17 +18,28 @@ const cssmin = require('gulp-cssmin');
 const sequence = require('gulp-sequence');
 const fs = require('fs');
 const {exec} = require('child_process');
-const RecipeServer = require('./server/RecipeServer');
 const open = require('open');
 const livereload = require('gulp-livereload');
+const reload = require('require-reload')(require);
+let RecipeServer = reload('./server/RecipeServer.js');
 
-const server = new RecipeServer({port: 3000});
+const serverPort = 3000;
+let server;
+let openCalled = false;
 
 const prodFileReplacements = [
 	{
 		path: 'www/index.html',
 		replace: ['app.js'],
 		with: ['app.min.js'],
+	},
+];
+
+const gulpFileReplacements = [
+	{
+		path: 'www/js/config.js',
+		replace: ['localhost'],
+		with: [`localhost:${serverPort}`],
 	},
 ];
 
@@ -262,8 +273,23 @@ gulp.task('prod-env', () => {
 	});
 });
 
-gulp.task('compile-scripts', ['lint-scripts', 'prod-env'], () => {
-	return browserify('www/js/app.js', {
+gulp.task('compile-scripts', ['lint-scripts', 'prod-env'], async () => {
+	let promises = [];
+
+	gulpFileReplacements.forEach((replacement) => {
+		promises.push(replaceInFile(replacement.path, replacement.replace, replacement.with));
+	});
+
+	try {
+		await Promise.all(promises);
+		promises = [];
+	}
+	catch(err) {
+		log.error(`Could not perform gulp file replacements: ${err}`);
+		promises = [];
+	}
+
+	const retStream = browserify('www/js/app.js', {
 		paths: [
 			'./node_modules', './www/js',
 		],
@@ -286,6 +312,21 @@ gulp.task('compile-scripts', ['lint-scripts', 'prod-env'], () => {
 		.pipe(plumber())
 		.pipe(gulp.dest('dist/js'))
 		.pipe(livereload());
+
+	gulpFileReplacements.forEach((replacement) => {
+		promises.push(replaceInFile(replacement.path, replacement.with, replacement.replace));
+	});
+
+	try {
+		await Promise.all(promises);
+		promises = [];
+	}
+	catch(err) {
+		log.error(`Could not perform gulp file replacements: ${err}`);
+		promises = [];
+	}
+
+	return retStream;
 });
 
 gulp.task('min-scripts', ['compile-scripts'], () => {
@@ -359,8 +400,13 @@ gulp.task('min-image', () => {
 });
 
 gulp.task('serve', () => {
+	server = new RecipeServer({port: serverPort});
+
 	server.start((url) => {
-		open(url);
+		if(!openCalled)
+			open(url);
+
+		openCalled = true;
 	});
 
 	process.on('SIGINT', () => {
@@ -369,9 +415,15 @@ gulp.task('serve', () => {
 	});
 });
 
-gulp.task('restart-server', () => {
+gulp.task('restart-server', (callback) => {
 	server.stop();
-	server.start();
+
+	reload.emptyCache('./server/RecipeServer.js');
+	RecipeServer = reload('./server/RecipeServer.js');
+
+	log('RecipeServer reloaded into cache.');
+
+	sequence(['serve'])(callback);
 });
 
 gulp.task('all-prod', (callback) => {

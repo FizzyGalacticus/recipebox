@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "sudo node server/run.js || true",
-	"serve-prod": "PORT=5000 KEY=/certs/key.key CERT=/certs/cert.cert node server/run.js",
-	"build-prod": "NODE_ENV=production gulp all-prod"
+    "serve-prod": "PORT=5000 KEY=/certs/key.key CERT=/certs/cert.cert node server/run.js",
+    "build-prod": "NODE_ENV=production gulp all-prod"
   },
   "repository": {
     "type": "git",
@@ -51,6 +51,7 @@
     "gulp-sequence": "^0.4.6",
     "gulp-uglify": "^3.0.0",
     "open": "^0.0.5",
+    "require-reload": "^0.2.2",
     "rollup-plugin-commonjs": "^8.3.0",
     "rollup-plugin-node-resolve": "^3.0.3",
     "rollupify": "^0.4.0",
