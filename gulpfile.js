@@ -34,6 +34,11 @@ const prodFileReplacements = [
 		replace: ['app.js'],
 		with: ['app.min.js'],
 	},
+	{
+		path: 'www/js/config.js',
+		replace: ['production = false'],
+		with: ['production = true'],
+	},
 ];
 
 /**
