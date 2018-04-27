@@ -15,103 +15,103 @@ class SocketHandler {
 		this.socketio.sockets.on('connection', (socket) => {
 			log(`Client connected.`);
 
-			socket.on('getRecipe', async (opts) => {
+			socket.on('getRecipe', async (opts, ack) => {
 				try {
 					const recipes = await this.database.getRecipe(opts);
-					socket.emit('getRecipe', {success: true, recipes});
+					ack({success: true, recipes});
 				}
 				catch(err) {
-					socket.emit('getRecipe', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('saveRecipe', async (data) => {
+			socket.on('saveRecipe', async (data, ack) => {
 				try {
 					const response = await this.database.saveRecipe(data);
-					socket.emit('saveRecipe', {success: true, response});
+					ack({success: true, response});
 				}
 				catch(err) {
-					socket.emit('saveRecipe', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('getIngredient', async (opts) => {
+			socket.on('getIngredient', async (opts, ack) => {
 				try {
 					const ingredients = await this.database.getIngredient(opts);
-					socket.emit('getIngredient', {success: true, ingredients});
+					ack({success: true, ingredients});
 				}
 				catch(err) {
-					socket.emit('getIngredient', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('saveIngredient', async (data) => {
+			socket.on('saveIngredient', async (data, ack) => {
 				try {
 					const response = await this.database.saveIngredient(data);
-					socket.emit('saveIngredient', {success: true, response});
+					ack({success: true, response});
 				}
 				catch(err) {
-					socket.emit('saveIngredient', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('getInstruction', async (opts) => {
+			socket.on('getInstruction', async (opts, ack) => {
 				try {
 					const instructions = await this.database.getInstruction(opts);
-					socket.emit('getInstruction', {success: true, instructions});
+					ack({success: true, instructions});
 				}
 				catch(err) {
-					socket.emit('getInstruction', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('saveInstruction', async (data) => {
+			socket.on('saveInstruction', async (data, ack) => {
 				try {
 					const response = await this.database.saveInstruction(data);
-					socket.emit('saveInstruction', {success: true, response});
+					ack({success: true, response});
 				}
 				catch(err) {
-					socket.emit('saveInstruction', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('getMeasurement', async (opts) => {
+			socket.on('getMeasurement', async (opts, ack) => {
 				try {
 					const measurements = await this.database.getMeasurement(opts);
-					socket.emit('getMeasurement', {success: true, measurements});
+					ack({success: true, measurements});
 				}
 				catch(err) {
-					socket.emit('getMeasurement', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('saveMeasurement', async (data) => {
+			socket.on('saveMeasurement', async (data, ack) => {
 				try {
 					const response = await this.database.saveMeasurement(data);
-					socket.emit('saveMeasurement', {success: true, response});
+					ack({success: true, response});
 				}
 				catch(err) {
-					socket.emit('saveMeasurement', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('getUser', async (opts) => {
+			socket.on('getUser', async (opts, ack) => {
 				try {
 					const users = await this.database.getUser(opts);
-					socket.emit('getUser', {success: true, users});
+					ack({success: true, users});
 				}
 				catch(err) {
-					socket.emit('getUser', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
-			socket.on('saveUser', async (data) => {
+			socket.on('saveUser', async (data, ack) => {
 				try {
 					const response = await this.database.saveUser(data);
-					socket.emit('saveUser', {success: true, response});
+					ack({success: true, response});
 				}
 				catch(err) {
-					socket.emit('saveUser', {success: false, message: err});
+					ack({success: false, message: err});
 				}
 			});
 
