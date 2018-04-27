@@ -20,6 +20,7 @@ const fs = require('fs');
 const {exec} = require('child_process');
 const open = require('open');
 const livereload = require('gulp-livereload');
+const jsonic = require('jsonic');
 const reload = require('require-reload')(require);
 let RecipeServer = reload('./server/RecipeServer.js');
 
@@ -32,14 +33,6 @@ const prodFileReplacements = [
 		path: 'www/index.html',
 		replace: ['app.js'],
 		with: ['app.min.js'],
-	},
-];
-
-const gulpFileReplacements = [
-	{
-		path: 'www/js/config.js',
-		replace: ['localhost'],
-		with: [`localhost:${serverPort}`],
 	},
 ];
 
@@ -273,23 +266,8 @@ gulp.task('prod-env', () => {
 	});
 });
 
-gulp.task('compile-scripts', ['lint-scripts', 'prod-env'], async () => {
-	let promises = [];
-
-	gulpFileReplacements.forEach((replacement) => {
-		promises.push(replaceInFile(replacement.path, replacement.replace, replacement.with));
-	});
-
-	try {
-		await Promise.all(promises);
-		promises = [];
-	}
-	catch(err) {
-		log.error(`Could not perform gulp file replacements: ${err}`);
-		promises = [];
-	}
-
-	const retStream = browserify('www/js/app.js', {
+gulp.task('compile-scripts', ['lint-scripts', 'prod-env'], () => {
+	return browserify('www/js/app.js', {
 		paths: [
 			'./node_modules', './www/js',
 		],
@@ -312,21 +290,6 @@ gulp.task('compile-scripts', ['lint-scripts', 'prod-env'], async () => {
 		.pipe(plumber())
 		.pipe(gulp.dest('dist/js'))
 		.pipe(livereload());
-
-	gulpFileReplacements.forEach((replacement) => {
-		promises.push(replaceInFile(replacement.path, replacement.with, replacement.replace));
-	});
-
-	try {
-		await Promise.all(promises);
-		promises = [];
-	}
-	catch(err) {
-		log.error(`Could not perform gulp file replacements: ${err}`);
-		promises = [];
-	}
-
-	return retStream;
 });
 
 gulp.task('min-scripts', ['compile-scripts'], () => {
@@ -399,8 +362,28 @@ gulp.task('min-image', () => {
 		.pipe(livereload());
 });
 
-gulp.task('serve', () => {
+gulp.task('serve', async () => {
 	server = new RecipeServer({port: serverPort});
+
+	let webConfig = {serverUrl: server.getLocalhostUrl()};
+
+	try {
+		let tempConfig = await readFile('./www/js/config.js');
+		tempConfig = tempConfig.replace('export default ', '');
+		tempConfig = tempConfig.replace(';', '');
+
+		webConfig = jsonic(tempConfig);
+	}
+	catch(err) {
+		log.error(`Could not read web config: ${err}`);
+	}
+
+	try {
+		await replaceInFile('dist/js/app.js', [webConfig.serverUrl], [server.getLocalhostUrl()]);
+	}
+	catch(err) {
+		log.error(`Could not replace web config serverUrl: ${err}`);
+	}
 
 	server.start((url) => {
 		if(!openCalled)
