@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import RecipesStateless from './RecipesStateless';
-import { socket } from '../../SocketIO';
+import {socket} from 'SocketIO';
 
 export default class RecipesContainer extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			recipes: []
-		}
+			recipes: [],
+		};
 
 		this.loadRecipe = this.loadRecipe.bind(this);
 	}
 
 	componentWillMount() {
 		console.log('Recipes: willMount');
-		socket.emit('getRecipe',{});
+		socket.emit('getRecipe', {});
 	}
 
 	componentDidMount() {
@@ -24,7 +24,7 @@ export default class RecipesContainer extends Component {
 		socket.on('getRecipe', (response) => {
 			// console.log(response.recipes[0]);
 			this.setState({
-				recipes: response.recipes
+				recipes: response.recipes,
 			});
 		});
 	}
@@ -45,7 +45,6 @@ export default class RecipesContainer extends Component {
 				recipes={this.state.recipes}
 				loadRecipe={this.loadRecipe}
 			/>
-		)
+		);
 	}
-
-}
+};

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import RecipeStateless from './RecipeStateless';
-import { socket } from '../../SocketIO';
+import {socket} from 'SocketIO';
 
 export default class RecipeContainer extends Component {
 	constructor(props) {
@@ -9,20 +9,20 @@ export default class RecipeContainer extends Component {
 
 		this.state = {
 			recipe: {},
-			recipeID: this.props.match.params.recipeID
-		}
+			recipeID: this.props.match.params.recipeID,
+		};
 	}
 
 	componentWillMount() {
 		console.log('RecipeContainer willMount');
-		socket.emit('getRecipe',{'_id': this.state.recipeID});
+		socket.emit('getRecipe', {'_id': this.state.recipeID});
 	}
 
 	componentDidMount() {
 		console.log('RecipeContainer didMount');
 		socket.on('getRecipe', (response) => {
 			this.setState({
-				recipe: response.recipes[0]
+				recipe: response.recipes[0],
 			});
 		});
 	}
@@ -32,6 +32,6 @@ export default class RecipeContainer extends Component {
 			<RecipeStateless
 				recipe={this.state.recipe}
 			/>
-		)
+		);
 	}
-}
+};

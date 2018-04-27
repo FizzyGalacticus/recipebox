@@ -1,12 +1,12 @@
-import SampleComponent from './components/SampleComponent';
-import Recipe from './components/Recipe';
-import Recipes from './components/Recipes';
-import NewRecipe from './components/NewRecipe';
+import SampleComponent from 'components/Pages/SampleComponent';
+import Recipe from 'components/Pages/Recipe';
+import Recipes from 'components/Pages/Recipes';
+import NewRecipe from 'components/Pages/NewRecipe';
 
 export const ROUTES = [
 	{
-		'title':'Home',
-		'href':'/home',
+		'title': 'Home',
+		'href': '/home',
 		'component': (props) => {
 			return (
 				<SampleComponent
@@ -14,40 +14,40 @@ export const ROUTES = [
 					{...props}
 				/>
 			);
-		}
+		},
 	},
 	{
-		'title':'Recipe',
-		'href':'/recipe/:recipeID',
+		'title': 'Recipe',
+		'href': '/recipe/:recipeID',
 		'display': false,
 		'component': (props) => {
 			return (
 				<Recipe
 					{...props}
 				/>
-			)
-		}
+			);
+		},
 	},
 	{
-		'title':'Recipes',
-		'href':'/recipes',
+		'title': 'Recipes',
+		'href': '/recipes',
 		'component': (props) => {
 			return (
 				<Recipes
 					{...props}
 				/>
-			)	
-		}
+			);
+		},
 	},
 	{
-		'title':'New Recipe',
-		'href':'/new-recipe',
+		'title': 'New Recipe',
+		'href': '/new-recipe',
 		'component': (props) => {
 			return (
-				<NewRecipe 
+				<NewRecipe
 					{...props}
 				/>
-			)
-		}
-	}
+			);
+		},
+	},
 ];

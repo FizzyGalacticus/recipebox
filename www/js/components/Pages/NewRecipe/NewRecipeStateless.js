@@ -1,5 +1,5 @@
 import React from 'react';
-import FormList from '../FormList';
+import FormList from 'components/FormList';
 
 export default function NewRecipeStateless(props) {
 	return (

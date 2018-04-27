@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import NewRecipeStateless from './NewRecipeStateless.js';
 
@@ -52,17 +52,17 @@ export default class NewRecipeContainer extends Component {
 		console.log(error);
 	}
 
-	updateRecipeArray(listObject){
+	updateRecipeArray(listObject) {
 		this.setState(listObject);
 	}
 
 	render() {
 		console.log('NewRecipe: rendering');
 		return (
-			<NewRecipeStateless 
+			<NewRecipeStateless
 				submit={this.submit}
 				updateArray={this.updateArray}
 			/>
-		)
+		);
 	}
 }
