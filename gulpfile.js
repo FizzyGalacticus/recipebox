@@ -18,22 +18,16 @@ const cssmin = require('gulp-cssmin');
 const sequence = require('gulp-sequence');
 const fs = require('fs');
 const {exec} = require('child_process');
-
-const express = require('express');
-const app = express();
-const http = require('http');
+const RecipeServer = require('./server/RecipeServer');
 const open = require('open');
-
 const livereload = require('gulp-livereload');
 
-app.use(express.static(`${__dirname}/dist`));
-
 const prodFileReplacements = [
-	/* {
-		path: 'path/to/file/to/edit',
-		replace: ['list', 'of', 'things', 'to', 'replace'],
-		with: ['list', 'of', 'things', 'to', 'replace', 'with'],
-	}, */
+	{
+		path: 'www/index.html',
+		replace: ['app.js'],
+		with: ['app.min.js'],
+	},
 ];
 
 /**
@@ -364,18 +358,14 @@ gulp.task('min-image', () => {
 });
 
 gulp.task('serve', () => {
-	const server = http.createServer(app);
-	const serverPort = 3000;
+	const server = new RecipeServer({port: 3000});
 
-	server.listen(serverPort, () => {
-		const url = `http://localhost:${serverPort}`;
-
-		log(`Now serving the page at ${url}`);
+	server.start((url) => {
 		open(url);
 	});
 
 	process.on('SIGINT', () => {
-		server.close();
+		server.stop();
 		process.exit();
 	});
 });
