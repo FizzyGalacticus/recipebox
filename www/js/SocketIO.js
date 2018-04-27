@@ -1,10 +1,14 @@
+import {serverUrl} from 'config';
+
 class SocketIO {
 	static getInstance() {
 		if(!SocketIO.socket)
-			SocketIO.socket = io(`https://localhost`);
+			SocketIO.socket = io(serverUrl);
 
 		return SocketIO.socket;
 	}
 }
 
-export let socket = SocketIO.getInstance();
+export const socket = SocketIO.getInstance();
+
+export default SocketIO.getInstance();
