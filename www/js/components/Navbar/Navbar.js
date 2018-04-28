@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import {Component} from 'react';
 
 import NavbarStateless from './NavbarStateless';
 
@@ -8,47 +8,36 @@ export default class NavbarContainer extends Component {
 
 		this.state = {
 			active: '',
-		}
+		};
 
 		this.setActive = this.setActive.bind(this);
 	}
 
 	componentWillMount() {
-		console.log('Navbar: componentWillMount');
-		
 		this.setState({
-			active: window.location.pathname.split('/')[1]
+			active: window.location.pathname.split('/')[1],
 		});
 	}
 
-	componentWillUnmount() {
-		console.log('Navbar: componentWillUnmount')
-	}
+	componentWillUnmount() {}
 
-	componentDidCatch(error, info) {
-		console.log(info);
-		console.log(error);
-	}
+	componentDidCatch(error, info) {}
 
 	setActive(lc) {
-		console.log('Navbar: setActive');
-
 		this.setState({
-			active: lc
+			active: lc,
 		});
 	}
 
 	render() {
-		console.log('Navbar: rendering');
-
 		return (
-			<NavbarStateless 
+			<NavbarStateless
 				id='recipebox-navbar'
-				links={this.props.links} 
+				links={this.props.links}
 				active={this.state.active}
 				click={this.setActive}
 				setActive={this.setActive}
 			/>
 		);
 	}
-}
+};
