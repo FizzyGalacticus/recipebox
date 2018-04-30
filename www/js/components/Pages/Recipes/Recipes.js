@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
 import RecipesStateless from './RecipesStateless';
-import {socket} from 'SocketIO';
 
 export default class RecipesContainer extends Component {
 	constructor(props) {
@@ -14,25 +13,11 @@ export default class RecipesContainer extends Component {
 		this.loadRecipe = this.loadRecipe.bind(this);
 	}
 
-	componentWillMount() {
-		console.log('Recipes: willMount');
-		socket.emit('getRecipe', {});
-	}
+	componentWillMount() {}
 
-	componentDidMount() {
-		console.log('Recipes: didMount');
-		socket.on('getRecipe', (response) => {
-			// console.log(response.recipes[0]);
-			this.setState({
-				recipes: response.recipes,
-			});
-		});
-	}
+	componentDidMount() {}
 
-	componentDidCatch(error, info) {
-		console.log(info);
-		console.log(error);
-	}
+	componentDidCatch(error, info) {}
 
 	loadRecipe(recipeID) {
 		window.location.hash = `#/recipe/${recipeID}`;

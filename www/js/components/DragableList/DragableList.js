@@ -1,34 +1,34 @@
-import * as React from "react";
-import * as ReactDOM from 'react-dom';
-import Dragula from 'react-dragula';
-import {Grid, Row, Col, ListGroup, ListGroupItem, FormControl, Button} from 'react-bootstrap';
+import {Component} from 'react';
+import {Dragula as dragula} from 'react-dragula';
+import {ListGroupItem} from 'react-bootstrap';
 
 function DragableListStateless(props) {
 	return (
-    	<div className='container' ref={props.dragulaDecorator}>
-        	{props.listItems.map((item, index) => {
-        		console.log(item,index);
-				return <ListGroupItem key={index}>{index + 1}. {item}</ListGroupItem>;
-			})}
-        </div>
-    );
+		<div className='container' ref={props.dragulaDecorator}>
+			{
+				props.listItems.map((item, index) => {
+					return <ListGroupItem key={index}>{index + 1}. {item}</ListGroupItem>;
+				})
+			}
+		</div>
+	);
 }
 
-class DragableList extends React.Component {
-
+class DragableList extends Component {
 	dragulaDecorator(componentBackingInstance) {
 		if(componentBackingInstance) {
-			let options = {};
-			Dragula([componentBackingInstance],options);
+			const options = {};
+			dragula([componentBackingInstance], options);
 		}
 	}
 
 	render() {
 		return (
-	    	<DragableListStateless 
-	    		dragulaDecorator={this.dragulaDecorator}
-	    		listItems={this.props.listItems} />
-	    );
+			<DragableListStateless
+				dragulaDecorator={this.dragulaDecorator}
+				listItems={this.props.listItems}
+			/>
+		);
 	}
 }
 
