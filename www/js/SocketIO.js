@@ -1,9 +1,9 @@
-import {serverUrl} from 'config';
+import config from 'config';
 
 class SocketIO {
 	static getInstance() {
 		if(SocketIO.socket === undefined)
-			SocketIO.socket = io(serverUrl);
+			SocketIO.socket = io(config.serverUrl);
 
 		return SocketIO.socket;
 	}

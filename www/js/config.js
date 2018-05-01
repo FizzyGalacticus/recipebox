@@ -1,5 +1,4 @@
-export const production = false;
-
 export default {
+	production: false,
 	serverUrl: 'https://localhost',
 };
