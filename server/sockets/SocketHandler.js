@@ -15,7 +15,7 @@ class SocketHandler {
 		this.socketio.sockets.on('connection', (socket) => {
 			log(`Client connected.`);
 
-			socket.on('getRecipe', async (opts, ack) => {
+			socket.on('getRecipe', async (opts, ack = () => {}) => {
 				try {
 					const recipes = await this.database.getRecipe(opts);
 					ack({success: true, recipes});
@@ -35,7 +35,7 @@ class SocketHandler {
 				}
 			});
 
-			socket.on('getIngredient', async (opts, ack) => {
+			socket.on('getIngredient', async (opts, ack = () => {}) => {
 				try {
 					const ingredients = await this.database.getIngredient(opts);
 					ack({success: true, ingredients});
@@ -55,7 +55,7 @@ class SocketHandler {
 				}
 			});
 
-			socket.on('getInstruction', async (opts, ack) => {
+			socket.on('getInstruction', async (opts, ack = () => {}) => {
 				try {
 					const instructions = await this.database.getInstruction(opts);
 					ack({success: true, instructions});
@@ -75,7 +75,7 @@ class SocketHandler {
 				}
 			});
 
-			socket.on('getMeasurement', async (opts, ack) => {
+			socket.on('getMeasurement', async (opts, ack = () => {}) => {
 				try {
 					const measurements = await this.database.getMeasurement(opts);
 					ack({success: true, measurements});
@@ -95,7 +95,7 @@ class SocketHandler {
 				}
 			});
 
-			socket.on('getUser', async (opts, ack) => {
+			socket.on('getUser', async (opts, ack = () => {}) => {
 				try {
 					const users = await this.database.getUser(opts);
 					ack({success: true, users});
