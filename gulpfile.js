@@ -5,6 +5,8 @@ const log = require('fancy-log');
 const plumber = require('gulp-plumber');
 const eslint = require('gulp-eslint');
 const browserify = require('browserify');
+const watchify = require('watchify');
+const livereactload = require('livereactload');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const source = require('vinyl-source-stream');
@@ -27,6 +29,87 @@ let RecipeServer = reload('./server/RecipeServer.js');
 const serverPort = 3000;
 let server;
 let openCalled = false;
+
+const builder = browserify('www/js/app.js', {
+	paths: [
+		'./node_modules', './www/js',
+	],
+	cache: {},
+	packageCache: {},
+	plugin: (process.env.NODE_ENV != 'production') ? [[watchify, {
+		ignoreWatch: ['**/node_modules/**'],
+	}], livereactload] : undefined,
+}).transform('babelify', {
+	presets: ['react', 'env'],
+	env: {
+		development: {
+			plugins: [
+				'transform-object-rest-spread',
+				'transform-decorators-legacy',
+				'transform-runtime',
+				['react-transform', {
+					transforms: [{
+						transform: 'livereactload/babel-transform',
+						imports: ['react'],
+					}],
+				}],
+			],
+		},
+		production: {
+			plugins: [
+				'transform-object-rest-spread',
+				'transform-decorators-legacy',
+				'transform-runtime',
+			],
+		},
+	},
+});
+
+/**
+ * Runs given files through eslint.
+ * @param {Array} files - The files to
+ * process with eslint.
+ * @return {stream} The lint stream.
+ */
+const lintScripts = (files = ['www/js/**/*.js']) => {
+	return gulp.src(files)
+		.pipe(eslint('.eslintrc'))
+		.pipe(eslint.format());
+};
+
+/**
+ * Uses the 'builder' browserify object
+ * to compile JS source.
+ * @return {stream} The build stream.
+ */
+const buildJS = () => {
+	return builder
+		.bundle()
+		.on('error', function(err) {
+			/* eslint-disable */
+			console.error(err);
+			this.emit('end');
+			/* eslint-enable */
+		})
+		.pipe(source('app.js'))
+		.pipe(buffer())
+		.pipe(plumber())
+		.pipe(gulp.dest('dist/js'));
+};
+
+builder.on('update', (ids) => {
+	lintScripts(ids);
+
+	const buildStart = Date.now();
+
+	ids.forEach((path) => {
+		log(`Rebuilding ${path} ...`);
+	});
+
+	buildJS().on('end', () => {
+		log(`... build complete: ${Date.now() - buildStart} ms`);
+	});
+});
 
 const prodFileReplacements = [
 	{
@@ -241,9 +324,7 @@ gulp.task('bump-patch', () => {
 });
 
 gulp.task('lint-scripts', () => {
-	return gulp.src(['www/js/**/*.js'])
-		.pipe(eslint('.eslintrc'))
-		.pipe(eslint.format());
+	return lintScripts();
 });
 
 gulp.task('prod-env', () => {
@@ -272,29 +353,7 @@ gulp.task('prod-env', () => {
 });
 
 gulp.task('compile-scripts', ['lint-scripts', 'prod-env'], () => {
-	return browserify('www/js/app.js', {
-		paths: [
-			'./node_modules', './www/js',
-		],
-	})
-		.transform('babelify', {
-			presets: ['react', 'env'],
-			plugins: [
-				'transform-object-rest-spread',
-				'transform-decorators-legacy',
-				'transform-runtime',
-			],
-		})
-		.bundle()
-		.on('error', function(err) {
-			log.error(err);
-			this.emit('end');
-		})
-		.pipe(source('app.js'))
-		.pipe(buffer())
-		.pipe(plumber())
-		.pipe(gulp.dest('dist/js'))
-		.pipe(livereload());
+	return buildJS();
 });
 
 gulp.task('min-scripts', ['compile-scripts'], () => {
@@ -368,7 +427,7 @@ gulp.task('min-image', () => {
 });
 
 gulp.task('serve', async () => {
-	server = new RecipeServer({port: serverPort});
+	server = new RecipeServer({port: serverPort, useSSL: false});
 
 	let webConfig = {serverUrl: server.getLocalhostUrl()};
 
@@ -426,10 +485,6 @@ gulp.task('watch-server', () => {
 	gulp.watch('server/**/*', ['restart-server']);
 });
 
-gulp.task('watch-scripts', () => {
-	gulp.watch('www/js/**/*.js', ['compile-scripts']);
-});
-
 gulp.task('watch-html', () => {
 	gulp.watch('www/**/*.html', ['min-html']);
 });
@@ -460,7 +515,6 @@ gulp.task('livereload', () => {
 });
 
 gulp.task('default', sequence('all', [
-	'watch-scripts',
 	'watch-html',
 	'watch-sass',
 	'watch-fonts',

@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const SocketHandler = require('./sockets/SocketHandler.js');
 const config = require(`${__dirname}/config.json`);
@@ -10,6 +11,11 @@ const log = require('fancy-log');
 class RecipeServer {
 	constructor(options = {}) {
 		let serveDirectory;
+
+		if(options.useSSL !== undefined)
+			this.useSSL = options.useSSL;
+		else
+			this.useSSL = `${__dirname}/${config.useSSL}`;
 
 		if(options.serveDirectory !== undefined)
 			serveDirectory = options.serveDirectory;
@@ -35,7 +41,10 @@ class RecipeServer {
 			res.sendFile(path.resolve(`${serveDirectory}/index.html`));
 		});
 
-		this.server = https.createServer(this.certs, app);
+		if(this.useSSL)
+			this.server = https.createServer(this.certs, app);
+		else
+			this.server = http.createServer(app);
 		this.socketHandler = new SocketHandler(this.server);
 	}
 
@@ -53,7 +62,10 @@ class RecipeServer {
 	}
 
 	getLocalhostUrl() {
-		return `https://localhost:${this.port}`;
+		if(this.useSSL)
+			return `https://localhost:${this.port}`;
+		else
+			return `http://localhost:${this.port}`;
 	}
 }
 
